@@ -24,7 +24,7 @@ def setupUI(): Unit = {
   appendPar(document.body, "Hello World")
 }
 
-@main def main(): Unit =
+def web(): Unit =
   document.addEventListener("DOMContentLoaded", { (e: dom.Event) =>
     setupUI()
   })
