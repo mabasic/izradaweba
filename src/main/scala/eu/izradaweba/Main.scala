@@ -1,4 +1,4 @@
-package example
+package eu.izradaweba
 
 import cats.effect.*
 import com.comcast.ip4s.*
@@ -9,10 +9,13 @@ import scalatags.Text.all.*
 import scalatags.Text.tags2.title
 import org.http4s.scalatags.*
 import org.http4s.server.middleware.Logger
+import org.http4s.server.{Router, Server}
+import org.http4s.server.staticcontent.*
 
 val response = html(
   head(
-    title("Scalatags + http4s FTW")
+    title("Scalatags + http4s FTW"),
+    script(src := "/assets/js/main.js", async := true)
   ),
   body(
     h1("This is my title"),
@@ -23,14 +26,20 @@ val response = html(
   )
 )
 
-object main extends IOApp {
+object Main extends IOApp {
 
-  val helloWorldService: HttpApp[IO] = HttpRoutes.of[IO] {
+  val helloWorldService: HttpRoutes[IO] = HttpRoutes.of[IO] {
     case GET -> Root =>
       Ok(response)
-  }.orNotFound
+  }
 
-  val finalHttpApp: HttpApp[IO] = Logger.httpApp(true, true)(helloWorldService)
+  val httpApp: HttpApp[IO] =
+    Router(
+      "/" -> helloWorldService,
+      "/assets" -> fileService(FileService.Config("./src/main/resources/"))
+    ).orNotFound
+
+  val finalHttpApp: HttpApp[IO] = Logger.httpApp(true, true)(httpApp)
 
   def run(args: List[String]): IO[ExitCode] =
     EmberServerBuilder
