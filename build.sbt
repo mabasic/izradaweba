@@ -16,6 +16,8 @@ lazy val root = (project in file("."))
     )
   )
 
+import java.io.File
+
 lazy val js = (project in file("js"))
   .settings(
     name := "Website JS",
@@ -23,18 +25,7 @@ lazy val js = (project in file("js"))
     scalaJSUseMainModuleInitializer := true,
     libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "2.3.0",
     libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.13" % "test",
-    jsEnv := new org.scalajs.jsenv.jsdomnodejs.JSDOMNodeJSEnv()
+    jsEnv := new org.scalajs.jsenv.jsdomnodejs.JSDOMNodeJSEnv(),
+    Compile / fastLinkJS / scalaJSLinkerOutputDirectory := new File("src/main/resources/js"),
+    Compile / fullLinkJS / scalaJSLinkerOutputDirectory := new File("src/main/resources/js")
   ).enablePlugins(ScalaJSPlugin)
-
-import sbt.io.IO
-
-val targetDirectory = new java.io.File("src/main/resources/js")
-
-lazy val copyDevJS = taskKey[Unit]("Copies fastopt (dev) JS output to src/main/resources.")
-lazy val copyProdJS = taskKey[Unit]("Copies opt (prod) JS output to src/main/resources.")
-
-copyDevJS :=
-  IO.copyDirectory(new java.io.File("js/target/scala-3.1.3/website-js-fastopt"), target = targetDirectory)
-
-copyProdJS :=
-  IO.copyDirectory(new java.io.File("js/target/scala-3.1.3/website-js-opt"), target = targetDirectory)
