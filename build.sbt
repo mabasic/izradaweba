@@ -22,5 +22,5 @@ lazy val js = (project in file("js"))
     libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.13" % "test",
     jsEnv := new org.scalajs.jsenv.jsdomnodejs.JSDOMNodeJSEnv(),
     Compile / fastLinkJS / scalaJSLinkerOutputDirectory := baseDirectory.value / "../src/main/resources/js",
-    Compile / fullLinkJS / scalaJSLinkerOutputDirectory := baseDirectory.value / "../src/main/resources/js",
+    Compile / fullLinkJS / scalaJSLinkerOutputDirectory := baseDirectory.value / "../src/main/resources/js"
   ).enablePlugins(ScalaJSPlugin)
