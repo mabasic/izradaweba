@@ -12,25 +12,13 @@ import org.http4s.server.middleware.Logger
 import org.http4s.server.{Router, Server}
 import org.http4s.server.staticcontent.*
 
-val response = html(
-  head(
-    title("Scalatags + http4s FTW"),
-    script(src := "/assets/js/main.js", async := true)
-  ),
-  body(
-    h1("This is my title"),
-    div(
-      p("This is my first paragraph"),
-      p("This is my second paragraph")
-    )
-  )
-)
+import eu.izradaweba.pages.homePage
 
 object Main extends IOApp {
 
   val helloWorldService: HttpRoutes[IO] = HttpRoutes.of[IO] {
     case GET -> Root =>
-      Ok(response)
+      Ok(homePage)
   }
 
   val httpApp: HttpApp[IO] =

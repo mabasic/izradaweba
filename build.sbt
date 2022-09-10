@@ -11,7 +11,7 @@ lazy val root = (project in file("."))
     libraryDependencies += "org.http4s" %% "http4s-ember-server" % http4sVersion,
     libraryDependencies += "org.http4s" %% "http4s-scalatags" % http4sVersion,
     libraryDependencies += "com.lihaoyi" %% "scalatags" % "0.11.1",
-    libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.2.11"
+    libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.4.0"
   )
 
 lazy val js = (project in file("js"))
