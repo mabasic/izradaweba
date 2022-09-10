@@ -263,7 +263,7 @@ val footer =
   )
 
 
-def defaultLayout(children: Seq[ConcreteHtmlTag[String]]) = html(
+def defaultLayout(children: Seq[ConcreteHtmlTag[String]]) = "<!DOCTYPE html>" + html(
   lang := "hr",
   head(
     title("Scalatags + http4s FTW"),
