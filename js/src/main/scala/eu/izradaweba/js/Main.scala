@@ -45,7 +45,7 @@ def setAutomaticTheme(theme: ThemeInterface, darkTheme: Boolean = false): Unit =
   darkSvg.classList.add(hiddenClass)
   lightSvg.classList.add(hiddenClass)
 
-  if (darkTheme)
+  if darkTheme then
     addDarkClassToBody()
   else
     removeDarkClassFromBody()
@@ -92,22 +92,22 @@ def enableThemeSwitching(theme: ThemeInterface): Unit =
     val localStorageTheme = getLocalStorageTheme
 
     // automatic -> dark
-    if (localStorageTheme == null)
+    if localStorageTheme == null then
       setDarkTheme(theme)
 
       // Whenever the user explicitly chooses dark mode
       window.localStorage.setItem("theme", darkClass)
 
     // dark -> light
-    else if (localStorageTheme == darkClass)
+    else if localStorageTheme == darkClass then
       setLightTheme(theme)
 
       // Whenever the user explicitly chooses light mode
       window.localStorage.setItem("theme", lightClass)
 
     // light -> automatic (dark/light)
-    else if (localStorageTheme == lightClass)
-      if (theme.prefersDark.matches)
+    else if localStorageTheme == lightClass then
+      if theme.prefersDark.matches then
         setAutomaticTheme(theme, darkTheme = true)
       else
         setAutomaticTheme(theme)
@@ -121,11 +121,11 @@ def enableThemeSwitching(theme: ThemeInterface): Unit =
 def applyTheme(theme: ThemeInterface): Unit =
   val localStorageTheme = getLocalStorageTheme
 
-  if (localStorageTheme == lightClass)
+  if localStorageTheme == lightClass then
     setLightTheme(theme)
-  else if (localStorageTheme == darkClass)
+  else if localStorageTheme == darkClass then
     setDarkTheme(theme)
-  else if (theme.prefersDark.matches)
+  else if theme.prefersDark.matches then
     setAutomaticTheme(theme, darkTheme = true)
   else
     setAutomaticTheme(theme)
@@ -136,7 +136,7 @@ def detectThemeChange(theme: ThemeInterface): Unit =
 
     localStorageTheme match
       case null =>
-        if (e.matches)
+        if e.matches then
           setAutomaticTheme(theme, darkTheme = true)
         else
           setAutomaticTheme(theme)

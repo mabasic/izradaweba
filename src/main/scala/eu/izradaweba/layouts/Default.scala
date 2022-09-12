@@ -1,11 +1,12 @@
 package eu.izradaweba.layouts
 
-import scalatags.Text.all._
+import eu.izradaweba.pages.Page
+import scalatags.Text.all.*
 import scalatags.Text.tags2.title
-import scalatags.Text.svgTags.{svg, circle, path, g, defs, linearGradient, rect, stop}
-import scalatags.Text.svgAttrs.{fill, stroke, strokeWidth, strokeLinejoin, strokeLinecap, cx, cy, d, r, viewBox, transform, x, y, x1, y1, x2, y2, gradientUnits, gradientTransform, offset}
-
+import scalatags.Text.svgTags.{circle, defs, g, linearGradient, path, rect, stop, svg}
+import scalatags.Text.svgAttrs.{cx, cy, d, fill, gradientTransform, gradientUnits, offset, r, stroke, strokeLinecap, strokeLinejoin, strokeWidth, transform, viewBox, x, x1, x2, y, y1, y2}
 import eu.izradaweba.svgs
+import eu.izradaweba.pages.Page
 
 val bgVideo =
   div(
@@ -111,12 +112,19 @@ val logo =
     )
   )
 
-def menuItem(text: String, href: String = "#", isActive: Boolean = false) =
+def menuItem(text: String, href: String = "#", isActive: Boolean = false, isMobile: Boolean = false) =
   val activeCls = "py-4 px-7 no-underline border-b border-b-solid transition duration-300 hover:text-theme-color dark:hover:text-dark-theme-color hover:border-b-2 hover:border-b-solid hover:border-b-theme-color dark:hover:border-b-dark-theme-color text-theme-color dark:text-dark-theme-color border-b-2 border-b-theme-color dark:border-b-dark-theme-color font-medium"
-
   val inactiveCls = "py-4 px-7 no-underline text-inactive-color dark:text-dark-inactive-color border-b border-b-solid border-b-transparent transition duration-300 hover:text-theme-color dark:hover:text-dark-theme-color hover:border-b-2 hover:border-b-solid hover:border-b-theme-color dark:hover:border-b-dark-theme-color font-medium"
 
-  val itemClass = if (isActive) activeCls else inactiveCls
+  val activeClsMobile = "no-underline text-theme-color dark:text-dark-theme-color p-2 font-semibold text-base transition duration-300 rounded-md hover:bg-hover-menu-bg dark:hover:bg-dark-hover-menu-bg"
+  val inactiveClsMobile = "no-underline text-theme-color dark:text-dark-theme-color p-2 font-normal text-base transition duration-300 rounded-md hover:bg-hover-menu-bg dark:hover:bg-dark-hover-menu-bg"
+
+  val itemClass =
+    (isMobile, isActive) match
+      case (true, true) => activeClsMobile
+      case (true, false) => inactiveClsMobile
+      case (false, true) => activeCls
+      case (false, false) => inactiveCls
 
   a(
     cls := itemClass,
@@ -124,30 +132,17 @@ def menuItem(text: String, href: String = "#", isActive: Boolean = false) =
     text
   )
 
-val menu =
+def menu(activePage: Page) =
   div(
     cls := "items-center hidden md:flex",
-    menuItem("Naslovna", isActive = true),
-    menuItem("Reference"),
-    menuItem("Kontakt"),
+    menuItem(Page.Home.name, href = Page.Home.url, isActive = activePage == Page.Home),
+    menuItem(Page.ReferenceIndex.name, href = Page.ReferenceIndex.url, isActive = activePage == Page.ReferenceIndex),
+    menuItem(Page.Contact.name)
   )
 
 val dot =
   div(
     cls := "w-1.5 h-1.5 bg-inactive-color dark:bg-dark-inactive-color group-hover:bg-theme-color dark:group-hover:bg-dark-theme-color rounded-full my-0 mx-0.5"
-  )
-
-def mobileMenuItem(text: String, href: String = "#", isActive: Boolean = false) =
-  val activeCls = "no-underline text-theme-color dark:text-dark-theme-color p-2 font-semibold text-base transition duration-300 rounded-md hover:bg-hover-menu-bg dark:hover:bg-dark-hover-menu-bg"
-
-  val inactiveCls = "no-underline text-theme-color dark:text-dark-theme-color p-2 font-normal text-base transition duration-300 rounded-md hover:bg-hover-menu-bg dark:hover:bg-dark-hover-menu-bg"
-
-  val itemClass = if (isActive) activeCls else inactiveCls
-
-  a(
-    cls := itemClass,
-    attr("href") := href,
-    text
   )
 
 val mobileNavbarToggle =
@@ -159,15 +154,15 @@ val mobileNavbarToggle =
     dot
   )
 
-val navbar =
+def navbar(activePage: Page) =
   div(
     cls := "flex items-center justify-between shrink-0 h-14 w-full border-b border-solid border-border-color dark:border-dark-border-color px-7 py-0 whitespace-nowrap",
     logo,
-    menu,
+    menu(activePage),
     mobileNavbarToggle
   )
 
-val mobileNavbar =
+def mobileNavbar(activePage: Page) =
   div(
     id := "mobile-navbar",
     cls := "overflow-auto p-6 shrink-0 hidden md:hidden",
@@ -179,9 +174,9 @@ val mobileNavbar =
       ),
       div(
         cls := "flex flex-col whitespace-nowrap",
-        mobileMenuItem("Naslovna", isActive = true),
-        mobileMenuItem("Reference"),
-        mobileMenuItem("Kontakt")
+        menuItem(Page.Home.name, isMobile = true, href = Page.Home.url, isActive = activePage == Page.Home),
+        menuItem(Page.ReferenceIndex.name, isMobile = true, href = Page.ReferenceIndex.url, isActive = activePage == Page.ReferenceIndex),
+        menuItem(Page.Contact.name, isMobile = true)
       )
     )
   )
@@ -262,8 +257,7 @@ val footer =
     )
   )
 
-
-def defaultLayout(children: Seq[ConcreteHtmlTag[String]]) = "<!DOCTYPE html>" + html(
+def defaultLayout(children: Seq[ConcreteHtmlTag[String]], activePage: Page) = html(
   lang := "hr",
   head(
     title("Scalatags + http4s FTW"),
@@ -278,8 +272,8 @@ def defaultLayout(children: Seq[ConcreteHtmlTag[String]]) = "<!DOCTYPE html>" + 
     popup,
     div(
       cls := "bg-theme-bg-color dark:bg-dark-theme-bg-color max-w-7xl overflow-hidden w-full sm:rounded-xl backdrop-blur-lg",
-      navbar,
-      mobileNavbar,
+      navbar(activePage),
+      mobileNavbar(activePage),
       div(
         cls := "flex grow overflow-hidden",
         div(

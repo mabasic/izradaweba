@@ -6,8 +6,9 @@ import scalatags.Text.tags.br
 import scalatags.Text.svgTags.{path, svg}
 import scalatags.Text.svgAttrs.{d, viewBox}
 import eu.izradaweba.layouts.defaultLayout
-import eu.izradaweba.svgs
-import scalatags.Text
+import eu.izradaweba.{Reference, svgs, Tag, references}
+import eu.izradaweba.partials.renderReferences
+import eu.izradaweba.pages.Page
 
 import java.net.URL
 
@@ -43,112 +44,6 @@ val heroSection =
     )
   )
 
-enum Tag(val tag: String):
-  case WebShop extends Tag("web-shop")
-  case BusinessApp extends Tag("business-app")
-  case DirectoryListing extends Tag("directory-listing")
-  case BookingSystem extends Tag("booking-system")
-  case CustomSoftware extends Tag("custom-software")
-  case WebStandard extends Tag("web-standard")
-
-  def getSvg: Text.TypedTag[String] =
-    this match {
-      case WebShop => svgs.webshop
-      case BusinessApp => svgs.businessApp
-      case DirectoryListing => svgs.directoryListing
-      case BookingSystem => svgs.bookingSystem
-      case CustomSoftware => svgs.customSoftware
-      case WebStandard => svgs.webStandard
-    }
-
-  override def toString: String =
-    s"#$tag"
-
-case class Reference(name: String, tag: Tag, url: Option[URL] = None)
-
-val references =
-  import Tag._
-
-  List(
-    Reference("Kikolina", WebShop, Some(URL("https://kikolina.hr"))),
-    Reference("Bonaventura", BookingSystem, Some(URL("https://bonaventura.vip"))),
-    Reference("VisitMurter", DirectoryListing, Some(URL("https://visitmurter.hr"))),
-    Reference("Stay in Adriatic", CustomSoftware, Some(URL("https://stayinadriatic.com"))),
-    Reference("G.I.M. Gase", BusinessApp, Some(URL("https://gimgase.hr"))),
-    Reference("Jet Ski Murter Kornati", WebStandard, Some(URL("https://kikolina.hr"))),
-  )
-
-val featuredReferences =
-  def tag(tag: Tag) =
-    span(
-      cls := "ml-auto w-32 relative font-normal md:hidden text-xs",
-      tag.toString
-    )
-
-  val seeMoreButton =
-    button(
-      cls := "border-0 cursor-pointer whitespace-nowrap transition duration-300 mt-4 py-1.5 px-6 rounded-2xl font-normal mt-0 text-sm bg-transparent mr-2 text-button-inactive dark:text-dark-button-inactive border border-solid border-button-inactive dark:border-dark-button-inactive hidden sm:block hover:text-black hover:border-black dark:hover:text-white dark:hover:border-white open-pop-up",
-      "Pogledajte"
-    )
-
-  def itemHeading(reference: Reference) =
-    val url = reference.url match
-      case Some(url) => url.toString
-      case None => "#"
-
-    div(
-      a(
-        href := url,
-        rel := "noopener nofollow",
-        target := "_blank",
-        reference.name
-      ),
-      br(),
-      tag(reference.tag)
-    )
-
-  def itemTag(tag: Tag) =
-    div(
-      cls := "ml-auto w-32 relative font-normal hidden md:inline text-sm",
-      tag.toString
-    )
-
-  val itemActions =
-    div(
-      cls := "flex items-center justify-end ml-auto w-44",
-      seeMoreButton
-    )
-
-  div(
-    cls := "mt-7 flex flex-col",
-    div(
-      cls := "text-content-title-color dark:text-dark-content-title-color mb-3.5 flex justify-between",
-      h2("Istaknute reference"),
-      div(
-        cls := "hidden sm:block self-center",
-        a(
-          cls := "text-xs hover:text-black dark:hover:text-white",
-          href := "#",
-          "Pogledajte sve reference"
-        )
-      )
-    ),
-    ul(
-      cls := "flex flex-col w-full h-full justify-around bg-theme-bg-color dark:bg-dark-content-bg pl-0 m-0 rounded-xl border border-solid border-theme-bg-color dark:border-dark-theme-bg-color",
-      for reference <- references yield
-        li(
-          cls := "transition duration-300 transform-gpu first:rounded-t-xl last:rounded-b-xl hover:bg-theme-bg-color dark:hover:bg-dark-theme-bg-color flex items-center w-full h-full whitespace-nowrap py-2.5 px-4 text-base border-t border-t-solid border-t-border-color dark:border-t-dark-border-color first:border-0",
-          div(
-            cls := "flex items-center w-36",
-            reference.tag.getSvg,
-            itemHeading(reference)
-          ),
-          itemTag(reference.tag),
-          itemActions
-        )
-    )
-  )
-
 trait Item:
   val name: String
   val description: String
@@ -157,7 +52,7 @@ trait Item:
 case class Service(name: String, description: String, tag: Tag) extends Item
 
 val services =
-  import Tag._
+  import eu.izradaweba.Tag._
 
   List(
     Service(
@@ -180,7 +75,7 @@ val services =
 case class Product(name: String, description: String, tag: Tag) extends Item
 
 val products =
-  import Tag._
+  import eu.izradaweba.Tag._
 
   List(
     Product(
@@ -241,6 +136,8 @@ def itemSection(title: String, items: List[Item]) =
     )
   )
 
+val featuredReferences = renderReferences(references.take(6), "Istaknute reference", isFeatured = true)
+
 val home =
   div(
     cls := "flex flex-col text-theme-color dark:text-dark-theme-color px-5 py-4 sm:px-10 sm:py-7 h-full overflow-auto bg-theme-bg-color dark:bg-dark-theme-bg-color",
@@ -250,4 +147,4 @@ val home =
     itemSection("Proizvodi", products)
   )
 
-val homePage = defaultLayout(Seq(home))
+val homePage = defaultLayout(Seq(home), activePage = Page.Home)

@@ -4,7 +4,7 @@ import scalatags.Text.all._
 import scalatags.Text.svgTags.{svg, path}
 import scalatags.Text.svgAttrs.{xmlns, viewBox, d}
 
-val webshop =
+val webShop =
   svg(
     cls := "shrink-0 w-7 rounded-md mr-4 fill-product-web-shop-icon-color",
     viewBox := "0 0 576 512",
