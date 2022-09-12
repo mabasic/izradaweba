@@ -1,7 +1,6 @@
 package eu.izradaweba.partials
 
-import eu.izradaweba.pages.Page
-import eu.izradaweba.{Reference, Tag}
+import eu.izradaweba.{Page, Reference, Tag}
 import scalatags.Text.all.*
 
 def renderReferences(references: List[Reference], heading: String, isFeatured: Boolean = false) =
@@ -55,7 +54,7 @@ def renderReferences(references: List[Reference], heading: String, isFeatured: B
           cls := "hidden sm:block self-center",
           a(
             cls := "text-xs hover:text-black dark:hover:text-white",
-            href := Page.ReferenceIndex.url,
+            href := Page.References.url.toString,
             "Pogledajte sve reference"
           )
         )

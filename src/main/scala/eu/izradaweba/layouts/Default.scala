@@ -1,12 +1,10 @@
 package eu.izradaweba.layouts
 
-import eu.izradaweba.pages.Page
 import scalatags.Text.all.*
 import scalatags.Text.tags2.title
 import scalatags.Text.svgTags.{circle, defs, g, linearGradient, path, rect, stop, svg}
 import scalatags.Text.svgAttrs.{cx, cy, d, fill, gradientTransform, gradientUnits, offset, r, stroke, strokeLinecap, strokeLinejoin, strokeWidth, transform, viewBox, x, x1, x2, y, y1, y2}
-import eu.izradaweba.svgs
-import eu.izradaweba.pages.Page
+import eu.izradaweba.{Page, svgs}
 
 val bgVideo =
   div(
@@ -135,8 +133,8 @@ def menuItem(text: String, href: String = "#", isActive: Boolean = false, isMobi
 def menu(activePage: Page) =
   div(
     cls := "items-center hidden md:flex",
-    menuItem(Page.Home.name, href = Page.Home.url, isActive = activePage == Page.Home),
-    menuItem(Page.ReferenceIndex.name, href = Page.ReferenceIndex.url, isActive = activePage == Page.ReferenceIndex),
+    menuItem(Page.Home.name, href = Page.Home.url.toString, isActive = activePage == Page.Home),
+    menuItem(Page.References.name, href = Page.References.url.toString, isActive = activePage == Page.References),
     menuItem(Page.Contact.name)
   )
 
@@ -174,8 +172,8 @@ def mobileNavbar(activePage: Page) =
       ),
       div(
         cls := "flex flex-col whitespace-nowrap",
-        menuItem(Page.Home.name, isMobile = true, href = Page.Home.url, isActive = activePage == Page.Home),
-        menuItem(Page.ReferenceIndex.name, isMobile = true, href = Page.ReferenceIndex.url, isActive = activePage == Page.ReferenceIndex),
+        menuItem(Page.Home.name, isMobile = true, href = Page.Home.url.toString, isActive = activePage == Page.Home),
+        menuItem(Page.References.name, isMobile = true, href = Page.References.url.toString, isActive = activePage == Page.References),
         menuItem(Page.Contact.name, isMobile = true)
       )
     )

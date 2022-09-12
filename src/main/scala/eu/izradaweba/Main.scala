@@ -12,15 +12,15 @@ import org.http4s.server.middleware.Logger
 import org.http4s.server.{Router, Server}
 import org.http4s.server.staticcontent.*
 
-import eu.izradaweba.pages.{homePage, referenceIndexPage}
+import eu.izradaweba.pages.{homePage, referencesPage}
 
 object Main extends IOApp {
 
   val helloWorldService: HttpRoutes[IO] = HttpRoutes.of[IO] {
-    case GET -> Root =>
+    case GET -> Page.Home.url =>
       Ok(homePage)
-    case GET -> Root / "reference" =>
-      Ok(referenceIndexPage)
+    case GET -> Page.References.url =>
+      Ok(referencesPage)
   }
 
   val httpApp: HttpApp[IO] =

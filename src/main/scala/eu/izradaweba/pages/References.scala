@@ -2,10 +2,9 @@ package eu.izradaweba.pages
 
 import scalatags.Text.all._
 
-import eu.izradaweba.references
+import eu.izradaweba.{Page, references}
 import eu.izradaweba.layouts.defaultLayout
 import eu.izradaweba.partials.renderReferences
-import eu.izradaweba.pages.Page
 
 val index =
   div(
@@ -13,4 +12,4 @@ val index =
     renderReferences(references, "Reference"),
   )
 
-val referenceIndexPage = defaultLayout(Seq(index), activePage = Page.ReferenceIndex)
+val referencesPage = defaultLayout(Seq(index), activePage = Page.References)
