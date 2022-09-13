@@ -4,7 +4,7 @@ import scalatags.Text.all.*
 import scalatags.Text.tags2.title
 import scalatags.Text.svgTags.{circle, defs, g, linearGradient, path, rect, stop, svg}
 import scalatags.Text.svgAttrs.{cx, cy, d, fill, gradientTransform, gradientUnits, offset, r, stroke, strokeLinecap, strokeLinejoin, strokeWidth, transform, viewBox, x, x1, x2, y, y1, y2}
-import eu.izradaweba.{Page, svgs}
+import eu.izradaweba.{Route, svgs}
 
 val bgVideo =
   div(
@@ -130,12 +130,12 @@ def menuItem(text: String, href: String = "#", isActive: Boolean = false, isMobi
     text
   )
 
-def menu(activePage: Page) =
+def menu(activeRoute: Route) =
   div(
     cls := "items-center hidden md:flex",
-    menuItem(Page.Home.name, href = Page.Home.url.toString, isActive = activePage == Page.Home),
-    menuItem(Page.References.name, href = Page.References.url.toString, isActive = activePage == Page.References),
-    menuItem(Page.Contact.name)
+    menuItem(Route.Home.name, href = Route.Home.url.toString, isActive = activeRoute == Route.Home),
+    menuItem(Route.References.name, href = Route.References.url.toString, isActive = activeRoute == Route.References),
+    menuItem(Route.Contact.name)
   )
 
 val dot =
@@ -152,15 +152,15 @@ val mobileNavbarToggle =
     dot
   )
 
-def navbar(activePage: Page) =
+def navbar(activeRoute: Route) =
   div(
     cls := "flex items-center justify-between shrink-0 h-14 w-full border-b border-solid border-border-color dark:border-dark-border-color px-7 py-0 whitespace-nowrap",
     logo,
-    menu(activePage),
+    menu(activeRoute),
     mobileNavbarToggle
   )
 
-def mobileNavbar(activePage: Page) =
+def mobileNavbar(activeRoute: Route) =
   div(
     id := "mobile-navbar",
     cls := "overflow-auto p-6 shrink-0 hidden md:hidden",
@@ -172,9 +172,9 @@ def mobileNavbar(activePage: Page) =
       ),
       div(
         cls := "flex flex-col whitespace-nowrap",
-        menuItem(Page.Home.name, isMobile = true, href = Page.Home.url.toString, isActive = activePage == Page.Home),
-        menuItem(Page.References.name, isMobile = true, href = Page.References.url.toString, isActive = activePage == Page.References),
-        menuItem(Page.Contact.name, isMobile = true)
+        menuItem(Route.Home.name, isMobile = true, href = Route.Home.url.toString, isActive = activeRoute == Route.Home),
+        menuItem(Route.References.name, isMobile = true, href = Route.References.url.toString, isActive = activeRoute == Route.References),
+        menuItem(Route.Contact.name, isMobile = true)
       )
     )
   )
@@ -255,7 +255,7 @@ val footer =
     )
   )
 
-def defaultLayout(children: Seq[ConcreteHtmlTag[String]], activePage: Page) = html(
+def defaultLayout(children: Seq[ConcreteHtmlTag[String]], activeRoute: Route) = html(
   lang := "hr",
   head(
     title("Scalatags + http4s FTW"),
@@ -270,8 +270,8 @@ def defaultLayout(children: Seq[ConcreteHtmlTag[String]], activePage: Page) = ht
     popup,
     div(
       cls := "bg-theme-bg-color dark:bg-dark-theme-bg-color max-w-7xl overflow-hidden w-full sm:rounded-xl backdrop-blur-lg",
-      navbar(activePage),
-      mobileNavbar(activePage),
+      navbar(activeRoute),
+      mobileNavbar(activeRoute),
       div(
         cls := "flex grow overflow-hidden",
         div(

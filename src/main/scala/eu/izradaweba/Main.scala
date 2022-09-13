@@ -16,16 +16,16 @@ import eu.izradaweba.pages.{homePage, referencesPage}
 
 object Main extends IOApp {
 
-  val helloWorldService: HttpRoutes[IO] = HttpRoutes.of[IO] {
-    case GET -> Page.Home.url =>
+  val routeService: HttpRoutes[IO] = HttpRoutes.of[IO] {
+    case GET -> Route.Home.url =>
       Ok(homePage)
-    case GET -> Page.References.url =>
+    case GET -> Route.References.url =>
       Ok(referencesPage)
   }
 
   val httpApp: HttpApp[IO] =
     Router(
-      "/" -> helloWorldService,
+      "/" -> routeService,
       "/assets" -> fileService(FileService.Config("./src/main/resources/"))
     ).orNotFound
 

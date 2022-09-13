@@ -6,7 +6,7 @@ import scalatags.Text.tags.br
 import scalatags.Text.svgTags.{path, svg}
 import scalatags.Text.svgAttrs.{d, viewBox}
 import eu.izradaweba.layouts.defaultLayout
-import eu.izradaweba.{Page, Reference, Tag, references, svgs}
+import eu.izradaweba.{Route, Reference, Tag, references, svgs}
 import eu.izradaweba.partials.renderReferences
 
 import java.net.URL
@@ -146,4 +146,4 @@ val home =
     itemSection("Proizvodi", products)
   )
 
-val homePage = defaultLayout(Seq(home), activePage = Page.Home)
+val homePage = defaultLayout(Seq(home), activeRoute = Route.Home)

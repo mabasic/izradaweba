@@ -1,9 +1,9 @@
 package eu.izradaweba.partials
 
-import eu.izradaweba.{Page, Reference, Tag}
+import eu.izradaweba.{Route, Reference, Tag}
 import scalatags.Text.all.*
 
-def renderReferences(references: List[Reference], heading: String, isFeatured: Boolean = false) =
+def renderReferences(references: List[Reference], heading: String, headingTag: ConcreteHtmlTag[String] = h2, isFeatured: Boolean = false) =
   def tag(tag: Tag) =
     span(
       cls := "ml-auto w-32 relative font-normal md:hidden text-xs",
@@ -48,13 +48,13 @@ def renderReferences(references: List[Reference], heading: String, isFeatured: B
     cls := "mt-7 flex flex-col",
     div(
       cls := "text-content-title-color dark:text-dark-content-title-color mb-3.5 flex justify-between",
-      h2(heading),
+      headingTag(heading),
       if isFeatured then
         div(
           cls := "hidden sm:block self-center",
           a(
             cls := "text-xs hover:text-black dark:hover:text-white",
-            href := Page.References.url.toString,
+            href := Route.References.url.toString,
             "Pogledajte sve reference"
           )
         )
