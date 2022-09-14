@@ -5,6 +5,9 @@ import scalatags.Text.tags2.title
 import scalatags.Text.svgTags.{circle, defs, g, linearGradient, path, rect, stop, svg}
 import scalatags.Text.svgAttrs.{cx, cy, d, fill, gradientTransform, gradientUnits, offset, r, stroke, strokeLinecap, strokeLinejoin, strokeWidth, transform, viewBox, x, x1, x2, y, y1, y2}
 import eu.izradaweba.{Route, svgs}
+import org.http4s.Uri.Path
+
+import java.net.URL
 
 val bgVideo =
   div(
@@ -105,7 +108,7 @@ val logo =
   div(
     cls := "w-52 shrink-0",
     a(
-      href := "#",
+      href := Route.Home.url.toString,
       raw(svgs.logo)
     )
   )
@@ -186,41 +189,57 @@ val overlay =
   )
 
 val footer =
+  /**
+   * It returns a search engine optimized HTML `a` tag which points to an external URL.
+   *
+   * @param text The text which is displayed on the link.
+   * @param url The URL to which the link points to.
+   * @param includeRel By setting this to false the link does not include the SEO optimization.
+   *                   Useful when the outgoing link points to your own website.
+   * @return It returns a scalatags tag.
+   */
+  def outboundFooterLink(text: String, url: URL, includeRel: Boolean = true) =
+    a(
+      cls := "underline",
+      href := url.toString,
+      if includeRel then
+        rel := "nofollow noopener"
+      else
+        "",
+      text
+    )
+
+  def footerLink(text: String, path: Path) =
+    a(
+      cls := "underline mr-2",
+      href := path.toString,
+      text
+    )
+
+  def routeLink(route: Route) =
+    footerLink(route.name, route.url)
+
   div(
     cls := "flex flex-col lg:flex-row justify-between text-theme-color dark:text-dark-theme-color py-5 px-10 items-start lg:items-center",
     div(
       cls := "text-xs",
       "©️ Mario Bašić 2014-2022. Sva prava pridržana. Napravljeno sa ",
-      a(
-        cls := "underline",
-        href := "#",
-        "Scala"
-      ),
+      outboundFooterLink("Scala", URL("https://scala-lang.org")),
       " i ",
-      a(
-        cls := "underline",
-        href := "#",
-        "Tailwind CSS"
-      ),
+      outboundFooterLink("Tailwind CSS", URL("https://tailwindcss.com")),
       "."
     ),
     div(
       cls := "text-xs mt-2 lg:mt-0 flex items-center justify-between",
       div(
-        a(
-          cls := "underline mr-2",
-          href := "#",
-          "Izjava o privatnosti"
-        ),
-        a(
-          cls := "underline mr-2",
-          href := "#",
-          "Izvorni kod"
-        ),
+        cls := "mr-2",
+        routeLink(Route.PrivacyNotice),
+        routeLink(Route.Credits),
+        outboundFooterLink("Izvorni kod", URL("https://github.com/mabasic/izradaweba"), includeRel = false),
       ),
       button(
         id := "theme-switch",
-        cls := "p-2 rounded-full flex",
+        cls := "p-2 rounded-full flex focus-visible:outline-none",
         svg(
           id := "theme-dark",
           fill := "currentColor",
@@ -255,32 +274,32 @@ val footer =
     )
   )
 
-def defaultLayout(children: Seq[ConcreteHtmlTag[String]], activeRoute: Route) = html(
+def defaultLayout(children: Seq[ConcreteHtmlTag[String]], activeRoute: Route, metaTitle: String) = doctype("html")(html(
   lang := "hr",
   head(
-    title("Scalatags + http4s FTW"),
+    title(metaTitle + " | IzradaWeba"),
     meta(charset := "UTF-8"),
     meta(name := "viewport", content := "width=device-width, initial-scale=1.0"),
     link(href := "/assets/css/index.css", rel := "stylesheet"),
     script(src := "/assets/js/main.js", defer := true)
   ),
   body(
-    cls := "flex items-center sm:p-8 w-full justify-center flex-col bg-[url('/assets/img/bg.jpg')] bg-cover bg-center font-sans",
+    cls := "flex items-center sm:p-8 w-full min-h-screen justify-center flex-col bg-[url('/assets/img/bg.jpg')] bg-cover bg-center font-sans",
     bgVideo,
     popup,
     div(
-      cls := "bg-theme-bg-color dark:bg-dark-theme-bg-color max-w-7xl overflow-hidden w-full sm:rounded-xl backdrop-blur-lg",
+      cls := "bg-theme-bg-color grow dark:bg-dark-theme-bg-color max-w-7xl overflow-hidden w-full sm:rounded-xl backdrop-blur-lg flex flex-col",
       navbar(activeRoute),
       mobileNavbar(activeRoute),
       div(
-        cls := "flex grow overflow-hidden",
+        cls := "flex flex-col grow w-full font-medium",
         div(
-          cls := "flex flex-col grow w-full font-medium",
-          children,
-          footer
-        )
+          cls := "flex flex-col text-theme-color dark:text-dark-theme-color px-5 py-4 sm:px-10 sm:py-7 h-full overflow-auto bg-theme-bg-color dark:bg-dark-theme-bg-color grow",
+          children
+        ),
+        footer
       )
     ),
     overlay
   )
-)
+))

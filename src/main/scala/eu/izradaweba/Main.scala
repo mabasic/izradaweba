@@ -2,25 +2,26 @@ package eu.izradaweba
 
 import cats.effect.*
 import com.comcast.ip4s.*
-import org.http4s.{HttpApp, HttpRoutes}
+import org.http4s.{Charset, EntityEncoder, HttpApp, HttpRoutes, MediaType}
 import org.http4s.dsl.io.*
 import org.http4s.ember.server.*
+import scalatags.text.Builder
 import scalatags.Text.all.*
 import scalatags.Text.tags2.title
-import org.http4s.scalatags.*
 import org.http4s.server.middleware.Logger
 import org.http4s.server.{Router, Server}
 import org.http4s.server.staticcontent.*
-
 import eu.izradaweba.pages.{homePage, referencesPage}
+import org.http4s.Charset.`UTF-8`
+import org.http4s.headers.`Content-Type`
 
 object Main extends IOApp {
 
   val routeService: HttpRoutes[IO] = HttpRoutes.of[IO] {
     case GET -> Route.Home.url =>
-      Ok(homePage)
+      Ok(homePage.render, `Content-Type`(MediaType.text.html, `UTF-8`))
     case GET -> Route.References.url =>
-      Ok(referencesPage)
+      Ok(referencesPage.render, `Content-Type`(MediaType.text.html, `UTF-8`))
   }
 
   val httpApp: HttpApp[IO] =

@@ -4,7 +4,7 @@ import scalatags.Text.all.*
 import scalatags.Text.attrs.src
 import scalatags.Text.tags.br
 import scalatags.Text.svgTags.{path, svg}
-import scalatags.Text.svgAttrs.{d, viewBox}
+import scalatags.Text.svgAttrs.{d, viewBox, fill}
 import eu.izradaweba.layouts.defaultLayout
 import eu.izradaweba.{Route, Reference, Tag, references, svgs}
 import eu.izradaweba.partials.renderReferences
@@ -13,16 +13,17 @@ import java.net.URL
 
 val heroSection =
   div(
-    cls := "flex flex-col-reverse sm:flex-row items-center w-full justify-between px-10 py-7 rounded-xl bg-content-wrapper-header",
+    cls := "flex flex-col-reverse md:flex-row items-center w-full justify-between px-10 py-7 rounded-xl bg-content-wrapper-header",
     div(
       cls := "max-w-sm",
       div(
-        cls := "flex items-center m-0 text-lg font-medium",
+        cls := "flex items-center m-0 text-lg font-medium text-dark-theme-color",
         svg(
           cls := "w-7 mr-3.5",
           xmlns := "http://www.w3.org/2000/svg",
           viewBox := "0 0 576 512",
           path(
+            fill := "currentColor",
             d := "M528 0h-480C21.5 0 0 21.5 0 48v320C0 394.5 21.5 416 48 416h192L224 464H152C138.8 464 128 474.8 128 488S138.8 512 152 512h272c13.25 0 24-10.75 24-24s-10.75-24-24-24H352L336 416h192c26.5 0 48-21.5 48-48v-320C576 21.5 554.5 0 528 0zM512 288H64V64h448V288z"
           )
         ),
@@ -30,7 +31,12 @@ val heroSection =
       ),
       div(
         cls := "text-sm font-normal mt-4 leading-7 text-content-text-color overflow-hidden text-ellipsis",
-        "Grab yourself 10 free images from Adobe Stock in a 30-day free trial plan and find perfect image, that will help you with your new project."
+        "Web stranice prilagođene svim uređajima, optimizirane za tražilice, sa Lighthouse rezultatom u prosjeku preko 90/100, ",
+        span(
+          cls := "font-semibold",
+          "po početnoj cijeni od 299,99€"
+        ),
+        "."
       ),
       button(
         cls := "bg-content-button-color dark:bg-dark-content-button-color border-0 text-[#ffffff] cursor-pointer transition duration-300 whitespace-nowrap mt-4 rounded-2xl py-2 px-6 hover:bg-content-button-hover-color dark:hover:bg-dark-content-button-hover-color",
@@ -38,8 +44,9 @@ val heroSection =
       )
     ),
     img(
-      cls := "w-44 -mt-6 object-cover object-center mb-4 sm:mb-0",
-      src := "/assets/img/glass.png"
+      cls := "mb-4 md:mb-0 w-[300px]",
+      src := "/assets/img/web-icon.svg",
+      alt := "3D illustration of a website layout"
     )
   )
 
@@ -56,7 +63,18 @@ val services =
   List(
     Service(
       name = "Web stranice",
-      description = "Edit, master and create fully professional videos",
+      description =
+        """
+          |Web stranica se sastoji od:
+          |
+          |Naslovne stranice koja sadrži:
+          |Hero sekciju sa glavnom atrakcijom istaknutom
+          |Ukratko vaše usluge/proizvode istaknute
+          |Cjenik (opcionalno)
+          |CTA sekcija gdje se poziva posjetitelj da vas kontaktira
+          |Izjava o privatnosti (GDPR)
+          |Kontakt stranica
+          |""".stripMargin,
       tag = WebStandard
     ),
     Service(
@@ -137,13 +155,11 @@ def itemSection(title: String, items: List[Item]) =
 
 val featuredReferences = renderReferences(references.take(6), "Istaknute reference", isFeatured = true)
 
-val home =
-  div(
-    cls := "flex flex-col text-theme-color dark:text-dark-theme-color px-5 py-4 sm:px-10 sm:py-7 h-full overflow-auto bg-theme-bg-color dark:bg-dark-theme-bg-color",
+val home = Seq(
     heroSection,
     featuredReferences,
     itemSection("Usluge", services),
     itemSection("Proizvodi", products)
   )
 
-val homePage = defaultLayout(Seq(home), activeRoute = Route.Home)
+val homePage = defaultLayout(home, activeRoute = Route.Home, metaTitle = "Izrada web stranica")
