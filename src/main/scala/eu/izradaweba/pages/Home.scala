@@ -52,10 +52,11 @@ val heroSection =
 
 trait Item:
   val name: String
-  val description: String
   val tag: Tag
+  val description: Option[String]
+  val descriptionHtml: Option[ConcreteHtmlTag[String]]
 
-case class Service(name: String, description: String, tag: Tag) extends Item
+case class Service(name: String, tag: Tag, description: Option[String] = None, descriptionHtml: Option[ConcreteHtmlTag[String]] = None) extends Item
 
 val services =
   import eu.izradaweba.Tag._
@@ -63,33 +64,22 @@ val services =
   List(
     Service(
       name = "Web stranice",
-      description =
-        """
-          |Web stranica se sastoji od:
-          |
-          |Naslovne stranice koja sadrži:
-          |Hero sekciju sa glavnom atrakcijom istaknutom
-          |Ukratko vaše usluge/proizvode istaknute
-          |Cjenik (opcionalno)
-          |CTA sekcija gdje se poziva posjetitelj da vas kontaktira
-          |Izjava o privatnosti (GDPR)
-          |Kontakt stranica
-          |""".stripMargin,
-      tag = WebStandard
+      tag = WebStandard,
+      description = Some("Izrada responzivnih web stranica prilagođenih svim uređajima, optimizirane za tražilice, sa Lighthouse rezultatom u prosjeku preko 90/100, po početnoj cijeni od 299,99€."),
     ),
     Service(
       name = "Softver po narudžbi",
-      description = "Edit, master and create fully professional videos",
+      description = Some("Izrada mobilnih aplikacija za iOS i android OS. Izrada skripti, desktop konzolnih i GUI aplikacija za Windows, macOS i Linux OS. Izrada web aplikacija, stranica, API-ja i serverless funkcija."),
       tag = CustomSoftware
     ),
     Service(
       name = "Poslovne aplikacije",
-      description = "Edit, master and create fully professional videos",
+      description = Some("Izrada poslovnih aplikacija uključuje analizu poslovanja, detekciju poslovnih procesa, optimizaciju postojećih procesa i izradu informacijskog sustava."),
       tag = BusinessApp
     ),
   )
 
-case class Product(name: String, description: String, tag: Tag) extends Item
+case class Product(name: String, tag: Tag, description: Option[String] = None, descriptionHtml: Option[ConcreteHtmlTag[String]] = None) extends Item
 
 val products =
   import eu.izradaweba.Tag._
@@ -97,17 +87,21 @@ val products =
   List(
     Product(
       name = "Internet trgovina",
-      description = "Edit, master and create fully professional videos",
+      descriptionHtml = Some(span(
+        "U skladu sa Hrvatskim zakonom i u suradnji sa servisom za vođenje paušalnog obrta ",
+        a(href := "https://pausalko.com", cls := "underline hover:font-semibold", rel := "nofollow noopener", target := "_blank", "Paušalko"),
+        " donosimo vam Internet trgovinu potpuno prilagođenu vašim potrebama."
+      )),
       tag = WebShop
     ),
     Product(
       name = "Sustav za rezervacije",
-      description = "Edit, master and create fully professional videos",
+      description = Some("Iznamljujete apartmane ili kuću i želite ne ovisiti o drugim servisima za booking? Na jednom mjestu imajte web stranicu za prikupljanje gostiju i sustav za upravljanje rezervacijama."),
       tag = BookingSystem
     ),
     Product(
       name = "Sustav za izlistaj",
-      description = "Edit, master and create fully professional videos",
+      description = Some("Geografski informacijski sustav (GIS) sa sustavom za upravljanje podacima (CMS), interaktivnom web stranicom i mobilnom aplikacijom, koji se može primjeniti na razna područja."),
       tag = DirectoryListing
     ),
   )
@@ -143,7 +137,11 @@ def itemSection(title: String, items: List[Item]) =
           ),
           div(
             cls := "text-sm grow font-normal leading-6 mt-5 pb-5 border-b border-b-solid border-b-border-color dark:border-b-dark-border-color",
-            item.description
+            item.descriptionHtml match
+              case Some(description) => description
+              case None => item.description match
+                case Some(description) => description
+                case None => ""
           ),
           div(
             cls := "flex items-center justify-end ml-auto mt-4",
