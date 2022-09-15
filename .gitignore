@@ -1,8 +1,10 @@
-target/
-node_modules/
 .bsp/
 .idea/
 .bloop/
 .metals/
 .vscode/
-/null
+.ammonite/
+target/
+node_modules/
+null/
+metals.sbt
