@@ -54,9 +54,9 @@ def setupMobileNavbarToggle(): Unit =
   val mobileNavbar = document.getElementById("mobile-navbar")
   val mobileNavbarToggle = document.getElementById("mobile-navbar-toggle")
 
-  mobileNavbarToggle.addEventListener("click", { (_: MouseEvent) =>
+  mobileNavbarToggle.addEventListener("click", (_: MouseEvent) =>
     mobileNavbar.classList.toggle(hiddenClass)
-  })
+  )
 
 def setupModal(): Unit =
   val closedPopup = document.getElementById("pop-up")
@@ -64,31 +64,31 @@ def setupModal(): Unit =
 
   val popupCloseTriggers = closedPopup.getElementsByClassName("close-pop-up")
 
-  popupCloseTriggers.foreach({ popupCloseTrigger =>
-    popupCloseTrigger.addEventListener("click", { (_: MouseEvent) =>
+  popupCloseTriggers.foreach(popupCloseTrigger =>
+    popupCloseTrigger.addEventListener("click", (_: MouseEvent) =>
       overlayApp.classList.add("invisible")
       overlayApp.classList.add("opacity-0")
       closedPopup.classList.add("invisible")
       closedPopup.classList.add("opacity-0")
-    })
-  })
+    )
+  )
 
   val popupOpenTriggers = document.getElementsByClassName("open-pop-up")
 
-  popupOpenTriggers.foreach({ popupOpenTrigger =>
-    popupOpenTrigger.addEventListener("click", { (_: MouseEvent) =>
+  popupOpenTriggers.foreach(popupOpenTrigger =>
+    popupOpenTrigger.addEventListener("click", (_: MouseEvent) =>
       overlayApp.classList.remove("invisible")
       overlayApp.classList.remove("opacity-0")
       closedPopup.classList.remove("invisible")
       closedPopup.classList.remove("opacity-0")
-    })
-  })
+    )
+  )
 
 // Flow: automatic -> dark -> light
 def enableThemeSwitching(theme: ThemeInterface): Unit =
   val themeSwitchButton = document.getElementById("theme-switch")
 
-  themeSwitchButton.addEventListener("click", { (_: MouseEvent) =>
+  themeSwitchButton.addEventListener("click", (_: MouseEvent) =>
     val localStorageTheme = getLocalStorageTheme
 
     // automatic -> dark
@@ -114,12 +114,12 @@ def enableThemeSwitching(theme: ThemeInterface): Unit =
 
       // Whenever the user explicitly chooses to respect the OS preference
       window.localStorage.removeItem("theme")
-
-    end if
-  })
+  )
 
 def applyTheme(theme: ThemeInterface): Unit =
   val localStorageTheme = getLocalStorageTheme
+
+  println(theme.prefersDark)
 
   if localStorageTheme == lightClass then
     setLightTheme(theme)
@@ -131,7 +131,8 @@ def applyTheme(theme: ThemeInterface): Unit =
     setAutomaticTheme(theme)
 
 def detectThemeChange(theme: ThemeInterface): Unit =
-  theme.prefersDark.asInstanceOf[EventTarget].addEventListener("change", { (e: MediaQueryList) =>
+  println(theme.prefersDark)
+  theme.prefersDark.asInstanceOf[EventTarget].addEventListener("change", (e: MediaQueryList) =>
     val localStorageTheme = getLocalStorageTheme
 
     localStorageTheme match
@@ -141,14 +142,14 @@ def detectThemeChange(theme: ThemeInterface): Unit =
         else
           setAutomaticTheme(theme)
       case _ => ()
-  })
+  )
 
-def setupThemeSwitcher(): Unit =
+def setupThemeSwitcher(prefersDark0: MediaQueryList): Unit =
   object Theme extends ThemeInterface:
     val automaticSvg: Element = document.getElementById("theme-automatic")
     val darkSvg: Element = document.getElementById("theme-dark")
     val lightSvg: Element = document.getElementById("theme-light")
-    val prefersDark: MediaQueryList = window.matchMedia("(prefers-color-scheme: dark)")
+    val prefersDark: MediaQueryList = prefersDark0
 
   applyTheme(Theme)
 
@@ -157,8 +158,22 @@ def setupThemeSwitcher(): Unit =
   enableThemeSwitching(Theme)
 
 @main def Main(): Unit =
-  document.addEventListener("DOMContentLoaded", { (_: Event) =>
+  val localStorageTheme = getLocalStorageTheme
+  val prefersDark = window.matchMedia("(prefers-color-scheme: dark)")
+
+  println(prefersDark)
+
+  if localStorageTheme == lightClass then
+    removeDarkClassFromBody()
+  else if localStorageTheme == darkClass then
+    addDarkClassToBody()
+  else if prefersDark.matches then
+    addDarkClassToBody()
+  else
+    removeDarkClassFromBody()
+
+  document.addEventListener("DOMContentLoaded", (_: Event) =>
     setupMobileNavbarToggle()
     setupModal()
-    setupThemeSwitcher()
-  })
+    setupThemeSwitcher(prefersDark)
+  )

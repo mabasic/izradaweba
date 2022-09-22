@@ -3,18 +3,33 @@ package eu.izradaweba.layouts
 import scalatags.Text.all.*
 import scalatags.Text.tags2.title
 import scalatags.Text.svgTags.{circle, defs, g, linearGradient, path, rect, stop, svg}
-import scalatags.Text.svgAttrs.{cx, cy, d, fill, gradientTransform, gradientUnits, offset, r, stroke, strokeLinecap, strokeLinejoin, strokeWidth, transform, viewBox, x, x1, x2, y, y1, y2}
+import scalatags.Text.svgAttrs.{cx, cy, d, fill, gradientTransform, gradientUnits, offset, r, stroke, strokeLinecap, strokeLinejoin, strokeWidth, transform, viewBox, x, x1, x2, y, y1, y2, preserveAspectRatio}
 import eu.izradaweba.{Route, svgs}
 import org.http4s.Uri.Path
 
 import java.net.URL
 
-val bgVideo =
+def bg(mode: ConcreteHtmlTag[String]) =
   div(
     cls := "fixed right-0 top-0 w-full h-full",
     span(
       cls := "absolute left-0 top-0 w-full h-screen backdrop-saturate-[3] bg-video-bg dark:hidden"
     ),
+    mode
+  )
+
+val bgGenerativeBigSurWaves =
+  bg(
+    svg(
+      id := "canvas",
+      cls := "w-screen h-screen",
+      viewBox := "0 0 1920 1080",
+      preserveAspectRatio := "xMaxYMid slice"
+    )
+  )
+
+val bgVideo =
+  bg(
     video(
       attr("width") := "320",
       attr("height") := "240",
@@ -274,18 +289,34 @@ val footer =
     )
   )
 
-def defaultLayout(children: Seq[ConcreteHtmlTag[String]], activeRoute: Route, metaTitle: String) = doctype("html")(html(
+enum BgMode:
+  case Video
+  case GenerativeBigSurWaves
+
+import BgMode._
+
+def defaultLayout(children: Seq[ConcreteHtmlTag[String]], activeRoute: Route, metaTitle: String, bgMode: BgMode = GenerativeBigSurWaves) =
+
+  def getBodyClass =
+    bgMode match
+      case Video => "bg-[url('/assets/img/bg.jpg')] bg-cover bg-center"
+      case _ => "" // bg-content-wrapper-header
+
+  doctype("html")(html(
   lang := "hr",
   head(
     title(metaTitle + " | IzradaWeba"),
     meta(charset := "UTF-8"),
     meta(name := "viewport", content := "width=device-width, initial-scale=1.0"),
     link(href := "/assets/css/index.css", rel := "stylesheet"),
-    script(src := "/assets/js/main.js", defer := true)
+    script(src := "/assets/js/main.js" /* , defer := true */),
+    script(src := "/assets/js/generativeBigSurWaves.mjs", /* defer := true,  */`type` := "module"),
   ),
   body(
-    cls := "flex items-center sm:p-8 w-full min-h-screen justify-center flex-col bg-[url('/assets/img/bg.jpg')] bg-cover bg-center font-sans",
-    bgVideo,
+    cls := s"flex items-center sm:p-8 w-full min-h-screen justify-center flex-col $getBodyClass font-sans",
+    bgMode match
+      case Video => bgVideo
+      case GenerativeBigSurWaves => bgGenerativeBigSurWaves,
     popup,
     div(
       cls := "bg-theme-bg-color grow dark:bg-dark-theme-bg-color max-w-7xl overflow-hidden w-full sm:rounded-xl backdrop-blur-lg flex flex-col",

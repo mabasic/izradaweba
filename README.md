@@ -1,5 +1,9 @@
 # Izrada weba
 
+## Tasks
+
+- [ ] Move bg svg generation to scala backend. Generate svg on the backend and include it in the returned html. To avoid FOUC (flash of unstyled content).
+
 ## Quickstart
 
 ```

@@ -1,6 +1,7 @@
 package eu.izradaweba
 
 import java.net.URL
+import java.net.Proxy
 
 case class Reference(name: String, tag: Tag, url: Option[URL] = None)
 
