@@ -10,4 +10,4 @@ val index = Seq(
     renderReferences(references, "Reference", headingTag = h1),
   )
 
-val referencesPage = defaultLayout(index, activeRoute = Route.References, metaTitle = "Reference")
+def referencesPage = defaultLayout(index, activeRoute = Route.References, metaTitle = "Reference")

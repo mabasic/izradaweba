@@ -160,4 +160,4 @@ val home = Seq(
     itemSection("Proizvodi", products)
   )
 
-val homePage = defaultLayout(home, activeRoute = Route.Home, metaTitle = "Izrada web stranica")
+def homePage = defaultLayout(home, activeRoute = Route.Home, metaTitle = "Izrada web stranica")

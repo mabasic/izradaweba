@@ -1,21 +1,37 @@
 case class Hsl(hue: Float, saturation: Float, lightness: Float):
     // if (hue > 360) throw new IllegalArgumentException("Hue cannot be higher than 360")
 
-    def toHex =
-        val l = this.lightness / 100
-        val a = this.saturation * Math.min(l, 1 - l) / 100
+    def analogous(results: Int = 6) =
+        val slices = 30
+        val part = 360 / slices // 12
 
-        val f = (n: Int) => {
-            val k = (n + this.hue / 30) % 12
-            val color = l - a * Math.max(Math.min(k - 3, 1), -1)
+        var results1 = results
 
-            Math.round(255 * color).toHexString.padTo(2, '0')
-        }
+        var hue = ((this.hue - (part * results1 >> 1)) + 720) % 360
 
-        s"#${f(0)}${f(8)}${f(4)}"
+        val res = for i <- 0 to results1 - 2 yield
+            hue = (hue + part) % 360
 
-val baseHsl = Hsl(360444449, 50, 50)
+            this.copy(hue = hue)
 
-println(baseHsl.toHex)
+        this +: res
 
-// 123.toHexString
+val baseHsl = Hsl(165, 65, 55)
+// ["hsl(165, 65%, 55%)","hsl(141, 65%, 55%)","hsl(153, 65%, 55%)","hsl(165, 65%, 55%)","hsl(177, 65%, 55%)","hsl(189, 65%, 55%)"]
+
+println(baseHsl.analogous(6))
+
+// function analogous(color, results, slices) {
+//     results = results || 6;
+//     slices = slices || 30;
+
+//     var hsl = tinycolor(color).toHsl();
+//     var part = 360 / slices;
+//     var ret = [tinycolor(color)];
+
+//     for (hsl.h = ((hsl.h - (part * results >> 1)) + 720) % 360; --results; ) {
+//         hsl.h = (hsl.h + part) % 360;
+//         ret.push(tinycolor(hsl));
+//     }
+//     return ret;
+// }

@@ -17,20 +17,20 @@ import org.http4s.headers.`Content-Type`
 
 object Main extends IOApp {
 
-  val routeService: HttpRoutes[IO] = HttpRoutes.of[IO] {
+  def routeService: HttpRoutes[IO] = HttpRoutes.of[IO] {
     case GET -> Route.Home.url =>
       Ok(homePage.render, `Content-Type`(MediaType.text.html, `UTF-8`))
     case GET -> Route.References.url =>
       Ok(referencesPage.render, `Content-Type`(MediaType.text.html, `UTF-8`))
   }
 
-  val httpApp: HttpApp[IO] =
+  def httpApp: HttpApp[IO] =
     Router(
       "/" -> routeService,
       "/assets" -> fileService(FileService.Config("./src/main/resources/"))
     ).orNotFound
 
-  val finalHttpApp: HttpApp[IO] = Logger.httpApp(true, true)(httpApp)
+  def finalHttpApp: HttpApp[IO] = Logger.httpApp(true, true)(httpApp)
 
   def run(args: List[String]): IO[ExitCode] =
     EmberServerBuilder
