@@ -304,7 +304,7 @@ val footer =
     cls := "flex flex-col lg:flex-row justify-between text-theme-color dark:text-dark-theme-color py-5 px-10 items-start lg:items-center",
     div(
       cls := "text-xs",
-      "©️ Mario Bašić 2014-2022. Sva prava pridržana. Napravljeno sa ",
+      "©️ Mario Bašić 2011-2022. Sva prava pridržana. Napravljeno sa ",
       outboundFooterLink("Scala", URL("https://scala-lang.org")),
       " i ",
       outboundFooterLink("Tailwind CSS", URL("https://tailwindcss.com")),

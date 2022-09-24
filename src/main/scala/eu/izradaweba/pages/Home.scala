@@ -181,7 +181,17 @@ def itemSection(title: String, items: List[Item]) =
   )
 
 val featuredReferences =
-  renderReferences(references.take(6), "Istaknute reference", isFeatured = true)
+  renderReferences(
+    references
+      .filter(_.featured)
+      .sortBy(_.name)
+      .reverse
+      .sortBy(_.yearMade)
+      .reverse
+      .take(6),
+    "Istaknute reference",
+    isFeatured = true
+  )
 
 val home = Seq(
   heroSection,

@@ -7,7 +7,15 @@ import eu.izradaweba.layouts.defaultLayout
 import eu.izradaweba.partials.renderReferences
 
 val index = Seq(
-  renderReferences(references, "Reference", headingTag = h1)
+  renderReferences(
+    references
+      .sortBy(_.name)
+      .reverse
+      .sortBy(_.yearMade)
+      .reverse,
+    "Reference",
+    headingTag = h1
+  )
 )
 
 def referencesPage =
