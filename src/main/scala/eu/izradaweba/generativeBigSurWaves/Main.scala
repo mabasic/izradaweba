@@ -15,7 +15,7 @@ package eu.izradaweba.generativeBigSurWaves
   modified the darken from 50 to 40 as it was producing strange colors. */
 
 /* Future:
-  I want to somehow animate the SVG waves on the client side, but don't know if that is possible yet. */
+  I want to somehow addAnimation the SVG waves on the client side, but don't know if that is possible yet. */
 
 import java.awt.Color
 import java.util.Date
@@ -29,9 +29,16 @@ import scalatags.Text.svgTags.{
   path,
   rect,
   stop,
-  svg
+  svg,
+  animate
 }
 import scalatags.Text.svgAttrs.{
+  values,
+  calcMode,
+  keySplines,
+  attributeName,
+  repeatCount,
+  dur,
   cx,
   cy,
   d,
@@ -127,11 +134,16 @@ def spline(
 
   path
 
-def wave(start: Point, end: Point, gradientId: String) =
+def wave(
+    start: Point,
+    end: Point,
+    gradientId: String,
+    addAnimation: Boolean = true
+) =
   val numSteps = Math.round(Random.between(4.0, 8.0))
   val randomRange = Random.between(32, 64)
 
-  val points =
+  def points =
     for i <- 0 to numSteps.toInt yield
       val step = map(i, 0, numSteps, 0, 1)
 
@@ -144,12 +156,26 @@ def wave(start: Point, end: Point, gradientId: String) =
 
       Point(x, y)
 
-  val pathData =
+  def pathData =
     spline(points) + s"L ${end.x.toInt} $height L ${start.x.toInt} $height Z"
 
+  val wave1Path = pathData
+  val waveAnimatedPath = pathData
+
   path(
-    d := pathData,
-    fill := s"url(#$gradientId)"
+    d := wave1Path,
+    fill := s"url(#$gradientId)",
+    if addAnimation then
+      animate(
+        dur := "5s",
+        repeatCount := "indefinite",
+        attributeName := "d",
+        values := s"$wave1Path;$waveAnimatedPath;$wave1Path",
+//        fill := "freeze",
+        calcMode := "spline",
+        keySplines := "0.4 0 0.2 1; 0.4 0 0.2 1"
+      )
+    else ""
   )
 
 def clamp01(value: Double) =
