@@ -10,7 +10,7 @@ package eu.izradaweba.generativeBigSurWaves
 /* Summary:
   I have took the codepen SVG generation code and libraries and have converted it to a scala package (this file) which
   can generate random Big Sur waves as SVG (scalatags) which can then be included in the website to avoid FOUC - Flash
-  of unstyled content. The code producted (this file) is not a 100% copy of the code from the libraries and the resulting
+  of unstyled content. The code produced (this file) is not a 100% copy of the code from the libraries and the resulting
   SVG is not 100% the same. I first started with Ints, then Floats, and have ended on using Doubles everywhere. I've
   modified the darken from 50 to 40 as it was producing strange colors. */
 
@@ -73,11 +73,11 @@ def formatPoints(points: Vector[Point], close: Boolean) =
   val points1 = points.flatMap(point => Vector(point.x, point.y))
 
   if close then
-    val lastPoint = points1.last;
-    val secondToLastPoint = points1(points1.length - 2);
+    val lastPoint = points1.last
+    val secondToLastPoint = points1(points1.length - 2)
 
-    val firstPoint = points1.head;
-    val secondPoint = points1(1);
+    val firstPoint = points1.head
+    val secondPoint = points1(1)
 
     Vector(secondToLastPoint, lastPoint) ++ points1 ++ Vector(
       firstPoint,
@@ -104,7 +104,7 @@ def spline(
   val maxIteration = if close then size - 4 else size - 2
   val inc = 2
 
-  for i <- startIteration to maxIteration - 1 by inc do
+  for i <- startIteration until maxIteration by inc do
     val x0 = if i > 0 then points(i - 2) else points(0)
     val y0 = if i > 0 then points(i - 1) else points(1)
 
@@ -145,11 +145,7 @@ def wave(start: Point, end: Point, gradientId: String) =
       Point(x, y)
 
   val pathData =
-    spline(
-      points,
-      1,
-      false
-    ) + s"L ${end.x.toInt} $height L ${start.x.toInt} $height Z"
+    spline(points) + s"L ${end.x.toInt} $height L ${start.x.toInt} $height Z"
 
   path(
     d := pathData,
@@ -163,51 +159,51 @@ case class Hsl(hue: Int, saturation: Double, lightness: Double):
   if (hue > 360)
     throw new IllegalArgumentException("Hue cannot be higher than 360")
 
-  def analogous(results: Int = 6) =
+  def analogous(results: Int = 6): Seq[Hsl] =
     val slices = 30
     val part = 360 / slices // 12
 
-    var results1 = results
+    val results1 = results
 
     var hue = ((this.hue - (part * results1 >> 1)) + 720) % 360
 
-    val res = for i <- 0 to results1 - 2 yield
+    val res = for _ <- 0 to results1 - 2 yield
       hue = (hue + part) % 360
 
       this.copy(hue = hue)
 
     this +: res
 
-  def darken(amount: Double = 10) =
+  def darken(amount: Double = 10): Hsl =
     val lightness = clamp01((this.lightness / 100) - (amount / 100))
 
     this.copy(lightness = lightness * 100)
 
-  def desaturate(amount: Double = 10) =
+  def desaturate(amount: Double = 10): Hsl =
     val saturation = clamp01((this.saturation / 100) - (amount / 100))
 
     this.copy(saturation = saturation * 100)
 
-  def lighten(amount: Double = 10) =
+  def lighten(amount: Double = 10): Hsl =
     val lightness = clamp01((this.lightness / 100) + (amount / 100))
 
     this.copy(lightness = lightness * 100)
 
   // Spin takes a positive or negative amount within [-360, 360] indicating the change of hue.
   // Values outside of this range will be wrapped into this range.
-  def spin(amount: Int = 10) =
+  def spin(amount: Int = 10): Hsl =
     val hue = (this.hue + amount) % 360
 
-    if hue < 0 then this.copy(hue = (360 + hue))
+    if hue < 0 then this.copy(hue = 360 + hue)
     else this.copy(hue = hue)
 
-  override def toString =
+  override def toString: String =
     val saturation = this.saturation.toInt
     val lightness = this.lightness.toInt
 
     s"hsl($hue, $saturation%, $lightness%)"
 
-  def toHex =
+  def toHex: String =
     val l = this.lightness / 100
     val a = this.saturation * Math.min(l, 1 - l) / 100
 
@@ -222,7 +218,7 @@ case class Hsl(hue: Int, saturation: Double, lightness: Double):
 def generate =
   val numWaves = 7.0
   val baseHsl = Hsl(Random.between(0, 360), 65, 55)
-  val colors = baseHsl.analogous(6)
+  val colors = baseHsl.analogous()
 
   def getRandomColor =
     colors(Random.between(0, colors.length))
@@ -237,7 +233,7 @@ def generate =
   var gradients: Seq[ConcreteHtmlTag[String]] = Seq()
 
   val waves =
-    for i <- 0 to numWaves.toInt - 1 yield
+    for i <- 0 until numWaves.toInt yield
       val randomOffset = Random.between(-50, 50)
       val originY =
         map(
@@ -250,7 +246,7 @@ def generate =
       val endY = map(i, 0, numWaves, 0, 1000) + randomOffset
 
       val color =
-        if i < 3 then getRandomColor.darken(40).desaturate(10)
+        if i < 3 then getRandomColor.darken(40).desaturate()
         else getRandomColor
 
       val gradientOffset = map(i, 0, numWaves, 0.1, 1)
@@ -287,5 +283,5 @@ def generate =
     preserveAspectRatio := "xMaxYMid slice",
     rectSvg,
     defs(gradients),
-    waves.toSeq
+    waves
   )
