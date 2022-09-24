@@ -2,11 +2,42 @@ package eu.izradaweba.layouts
 
 import scalatags.Text.all.*
 import scalatags.Text.tags2.title
-import scalatags.Text.svgTags.{circle, defs, g, linearGradient, path, rect, stop, svg}
-import scalatags.Text.svgAttrs.{cx, cy, d, fill, gradientTransform, gradientUnits, offset, r, stroke, strokeLinecap, strokeLinejoin, strokeWidth, transform, viewBox, x, x1, x2, y, y1, y2, preserveAspectRatio}
+import scalatags.Text.svgTags.{
+  circle,
+  defs,
+  g,
+  linearGradient,
+  path,
+  rect,
+  stop,
+  svg
+}
+import scalatags.Text.svgAttrs.{
+  cx,
+  cy,
+  d,
+  fill,
+  gradientTransform,
+  gradientUnits,
+  offset,
+  r,
+  stroke,
+  strokeLinecap,
+  strokeLinejoin,
+  strokeWidth,
+  transform,
+  viewBox,
+  x,
+  x1,
+  x2,
+  y,
+  y1,
+  y2,
+  preserveAspectRatio
+}
 import eu.izradaweba.{Route, svgs}
 import org.http4s.Uri.Path
-import eu.izradaweba.generativeBigSurWaves.generate
+import eu.izradaweba.generativeBigSurWaves.{generate => generateBigSurWaves}
 
 import java.net.URL
 
@@ -21,13 +52,17 @@ def bg(mode: ConcreteHtmlTag[String]) =
 
 def bgGenerativeBigSurWaves =
   bg(
-    generate
-    // svg(
-    //   id := "canvas",
-    //   cls := "w-screen h-screen",
-    //   viewBox := "0 0 1920 1080",
-    //   preserveAspectRatio := "xMaxYMid slice"
-    // )
+    generateBigSurWaves
+  )
+
+def bgGenerativeBigSurWavesJS =
+  bg(
+    svg(
+      id := "canvas",
+      cls := "w-screen h-screen",
+      viewBox := "0 0 1920 1080",
+      preserveAspectRatio := "xMaxYMid slice"
+    )
   )
 
 val bgVideo =
@@ -130,18 +165,27 @@ val logo =
     )
   )
 
-def menuItem(text: String, href: String = "#", isActive: Boolean = false, isMobile: Boolean = false) =
-  val activeCls = "py-4 px-7 no-underline border-b border-b-solid transition duration-300 hover:text-theme-color dark:hover:text-dark-theme-color hover:border-b-2 hover:border-b-solid hover:border-b-theme-color dark:hover:border-b-dark-theme-color text-theme-color dark:text-dark-theme-color border-b-2 border-b-theme-color dark:border-b-dark-theme-color font-medium"
-  val inactiveCls = "py-4 px-7 no-underline text-inactive-color dark:text-dark-inactive-color border-b border-b-solid border-b-transparent transition duration-300 hover:text-theme-color dark:hover:text-dark-theme-color hover:border-b-2 hover:border-b-solid hover:border-b-theme-color dark:hover:border-b-dark-theme-color font-medium"
+def menuItem(
+    text: String,
+    href: String = "#",
+    isActive: Boolean = false,
+    isMobile: Boolean = false
+) =
+  val activeCls =
+    "py-4 px-7 no-underline border-b border-b-solid transition duration-300 hover:text-theme-color dark:hover:text-dark-theme-color hover:border-b-2 hover:border-b-solid hover:border-b-theme-color dark:hover:border-b-dark-theme-color text-theme-color dark:text-dark-theme-color border-b-2 border-b-theme-color dark:border-b-dark-theme-color font-medium"
+  val inactiveCls =
+    "py-4 px-7 no-underline text-inactive-color dark:text-dark-inactive-color border-b border-b-solid border-b-transparent transition duration-300 hover:text-theme-color dark:hover:text-dark-theme-color hover:border-b-2 hover:border-b-solid hover:border-b-theme-color dark:hover:border-b-dark-theme-color font-medium"
 
-  val activeClsMobile = "no-underline text-theme-color dark:text-dark-theme-color p-2 font-semibold text-base transition duration-300 rounded-md hover:bg-hover-menu-bg dark:hover:bg-dark-hover-menu-bg"
-  val inactiveClsMobile = "no-underline text-theme-color dark:text-dark-theme-color p-2 font-normal text-base transition duration-300 rounded-md hover:bg-hover-menu-bg dark:hover:bg-dark-hover-menu-bg"
+  val activeClsMobile =
+    "no-underline text-theme-color dark:text-dark-theme-color p-2 font-semibold text-base transition duration-300 rounded-md hover:bg-hover-menu-bg dark:hover:bg-dark-hover-menu-bg"
+  val inactiveClsMobile =
+    "no-underline text-theme-color dark:text-dark-theme-color p-2 font-normal text-base transition duration-300 rounded-md hover:bg-hover-menu-bg dark:hover:bg-dark-hover-menu-bg"
 
   val itemClass =
     (isMobile, isActive) match
-      case (true, true) => activeClsMobile
-      case (true, false) => inactiveClsMobile
-      case (false, true) => activeCls
+      case (true, true)   => activeClsMobile
+      case (true, false)  => inactiveClsMobile
+      case (false, true)  => activeCls
       case (false, false) => inactiveCls
 
   a(
@@ -153,8 +197,16 @@ def menuItem(text: String, href: String = "#", isActive: Boolean = false, isMobi
 def menu(activeRoute: Route) =
   div(
     cls := "items-center hidden md:flex",
-    menuItem(Route.Home.name, href = Route.Home.url.toString, isActive = activeRoute == Route.Home),
-    menuItem(Route.References.name, href = Route.References.url.toString, isActive = activeRoute == Route.References),
+    menuItem(
+      Route.Home.name,
+      href = Route.Home.url.toString,
+      isActive = activeRoute == Route.Home
+    ),
+    menuItem(
+      Route.References.name,
+      href = Route.References.url.toString,
+      isActive = activeRoute == Route.References
+    ),
     menuItem(Route.Contact.name)
   )
 
@@ -192,8 +244,18 @@ def mobileNavbar(activeRoute: Route) =
       ),
       div(
         cls := "flex flex-col whitespace-nowrap",
-        menuItem(Route.Home.name, isMobile = true, href = Route.Home.url.toString, isActive = activeRoute == Route.Home),
-        menuItem(Route.References.name, isMobile = true, href = Route.References.url.toString, isActive = activeRoute == Route.References),
+        menuItem(
+          Route.Home.name,
+          isMobile = true,
+          href = Route.Home.url.toString,
+          isActive = activeRoute == Route.Home
+        ),
+        menuItem(
+          Route.References.name,
+          isMobile = true,
+          href = Route.References.url.toString,
+          isActive = activeRoute == Route.References
+        ),
         menuItem(Route.Contact.name, isMobile = true)
       )
     )
@@ -206,23 +268,25 @@ val overlay =
   )
 
 val footer =
-  /**
-   * It returns a search engine optimized HTML `a` tag which points to an external URL.
-   *
-   * @param text The text which is displayed on the link.
-   * @param url The URL to which the link points to.
-   * @param includeRel By setting this to false the link does not include the SEO optimization.
-   *                   Useful when the outgoing link points to your own website.
-   * @return It returns a scalatags tag.
-   */
+  /** It returns a search engine optimized HTML `a` tag which points to an
+    * external URL.
+    *
+    * @param text
+    *   The text which is displayed on the link.
+    * @param url
+    *   The URL to which the link points to.
+    * @param includeRel
+    *   By setting this to false the link does not include the SEO optimization.
+    *   Useful when the outgoing link points to your own website.
+    * @return
+    *   It returns a scalatags tag.
+    */
   def outboundFooterLink(text: String, url: URL, includeRel: Boolean = true) =
     a(
       cls := "underline",
       href := url.toString,
-      if includeRel then
-        rel := "nofollow noopener"
-      else
-        "",
+      if includeRel then rel := "nofollow noopener"
+      else "",
       text
     )
 
@@ -252,7 +316,11 @@ val footer =
         cls := "mr-2",
         routeLink(Route.PrivacyNotice),
         routeLink(Route.Credits),
-        outboundFooterLink("Izvorni kod", URL("https://github.com/mabasic/izradaweba"), includeRel = false),
+        outboundFooterLink(
+          "Izvorni kod",
+          URL("https://github.com/mabasic/izradaweba"),
+          includeRel = false
+        )
       ),
       button(
         id := "theme-switch",
@@ -291,48 +359,71 @@ val footer =
     )
   )
 
+// For historic purposes, the ability to choose the background mode.
 enum BgMode:
+  // This is the default which came with the codepen.
   case Video
+  // This is my code which generates big sur waves svg based on the JS codepen
   case GenerativeBigSurWaves
+  // This is the codepen code which generates big sur waves svg
+  case GenerativeBigSurWavesJS
 
 import BgMode._
 
-def defaultLayout(children: Seq[ConcreteHtmlTag[String]], activeRoute: Route, metaTitle: String, bgMode: BgMode = GenerativeBigSurWaves) =
+def defaultLayout(
+    children: Seq[ConcreteHtmlTag[String]],
+    activeRoute: Route,
+    metaTitle: String,
+    bgMode: BgMode = GenerativeBigSurWaves
+) =
 
   def getBodyClass =
     bgMode match
       case Video => "bg-[url('/assets/img/bg.jpg')] bg-cover bg-center"
-      case _ => "" // bg-content-wrapper-header
+      case _     => ""
 
-  doctype("html")(html(
-  lang := "hr",
-  head(
-    title(metaTitle + " | IzradaWeba"),
-    meta(charset := "UTF-8"),
-    meta(name := "viewport", content := "width=device-width, initial-scale=1.0"),
-    link(href := "/assets/css/index.css", rel := "stylesheet"),
-    script(src := "/assets/js/main.js" /* , defer := true */),
-    // script(src := "/assets/js/generativeBigSurWaves.mjs", /* defer := true,  */`type` := "module"),
-  ),
-  body(
-    cls := s"flex items-center sm:p-8 w-full min-h-screen justify-center flex-col $getBodyClass font-sans",
-    bgMode match
-      case Video => bgVideo
-      case GenerativeBigSurWaves => bgGenerativeBigSurWaves,
-    popup,
-    div(
-      cls := "bg-theme-bg-color grow dark:bg-dark-theme-bg-color max-w-7xl overflow-hidden w-full sm:rounded-xl backdrop-blur-lg flex flex-col",
-      navbar(activeRoute),
-      mobileNavbar(activeRoute),
-      div(
-        cls := "flex flex-col grow w-full font-medium",
-        div(
-          cls := "flex flex-col text-theme-color dark:text-dark-theme-color px-5 py-4 sm:px-10 sm:py-7 h-full overflow-auto bg-theme-bg-color dark:bg-dark-theme-bg-color grow",
-          children
+  doctype("html")(
+    html(
+      lang := "hr",
+      head(
+        title(metaTitle + " | IzradaWeba"),
+        meta(charset := "UTF-8"),
+        meta(
+          name := "viewport",
+          content := "width=device-width, initial-scale=1.0"
         ),
-        footer
+        link(href := "/assets/css/index.css", rel := "stylesheet"),
+        script(src := "/assets/js/main.js"),
+        bgMode match
+          case GenerativeBigSurWavesJS =>
+            script(
+              src := "/assets/libs/generativeBigSurWaves.mjs",
+              `type` := "module"
+            )
+          case _ => ""
+      ),
+      body(
+        cls := s"flex items-center sm:p-8 w-full min-h-screen justify-center flex-col $getBodyClass font-sans",
+        bgMode match
+          case Video                   => bgVideo
+          case GenerativeBigSurWaves   => bgGenerativeBigSurWaves
+          case GenerativeBigSurWavesJS => bgGenerativeBigSurWavesJS
+        ,
+        popup,
+        div(
+          cls := "bg-theme-bg-color grow dark:bg-dark-theme-bg-color max-w-7xl overflow-hidden w-full sm:rounded-xl backdrop-blur-lg flex flex-col",
+          navbar(activeRoute),
+          mobileNavbar(activeRoute),
+          div(
+            cls := "flex flex-col grow w-full font-medium",
+            div(
+              cls := "flex flex-col text-theme-color dark:text-dark-theme-color px-5 py-4 sm:px-10 sm:py-7 h-full overflow-auto bg-theme-bg-color dark:bg-dark-theme-bg-color grow",
+              children
+            ),
+            footer
+          )
+        ),
+        overlay
       )
-    ),
-    overlay
+    )
   )
-))

@@ -56,7 +56,12 @@ trait Item:
   val description: Option[String]
   val descriptionHtml: Option[ConcreteHtmlTag[String]]
 
-case class Service(name: String, tag: Tag, description: Option[String] = None, descriptionHtml: Option[ConcreteHtmlTag[String]] = None) extends Item
+case class Service(
+    name: String,
+    tag: Tag,
+    description: Option[String] = None,
+    descriptionHtml: Option[ConcreteHtmlTag[String]] = None
+) extends Item
 
 val services =
   import eu.izradaweba.Tag._
@@ -65,21 +70,32 @@ val services =
     Service(
       name = "Web stranice",
       tag = WebStandard,
-      description = Some("Izrada responzivnih web stranica prilagođenih svim uređajima, optimizirane za tražilice, sa Lighthouse rezultatom u prosjeku preko 90/100, po početnoj cijeni od 299,99€."),
+      description = Some(
+        "Izrada responzivnih web stranica prilagođenih svim uređajima, optimizirane za tražilice, sa Lighthouse rezultatom u prosjeku preko 90/100, po početnoj cijeni od 299,99€."
+      )
     ),
     Service(
       name = "Softver po narudžbi",
-      description = Some("Izrada mobilnih aplikacija za iOS i android OS. Izrada skripti, desktop konzolnih i GUI aplikacija za Windows, macOS i Linux OS. Izrada web aplikacija, stranica, API-ja i serverless funkcija."),
+      description = Some(
+        "Izrada mobilnih aplikacija za iOS i android OS. Izrada skripti, desktop konzolnih i GUI aplikacija za Windows, macOS i Linux OS. Izrada web aplikacija, stranica, API-ja i serverless funkcija."
+      ),
       tag = CustomSoftware
     ),
     Service(
       name = "Poslovne aplikacije",
-      description = Some("Izrada poslovnih aplikacija uključuje analizu poslovanja, detekciju poslovnih procesa, optimizaciju postojećih procesa i izradu informacijskog sustava."),
+      description = Some(
+        "Izrada poslovnih aplikacija uključuje analizu poslovanja, detekciju poslovnih procesa, optimizaciju postojećih procesa i izradu informacijskog sustava."
+      ),
       tag = BusinessApp
-    ),
+    )
   )
 
-case class Product(name: String, tag: Tag, description: Option[String] = None, descriptionHtml: Option[ConcreteHtmlTag[String]] = None) extends Item
+case class Product(
+    name: String,
+    tag: Tag,
+    description: Option[String] = None,
+    descriptionHtml: Option[ConcreteHtmlTag[String]] = None
+) extends Item
 
 val products =
   import eu.izradaweba.Tag._
@@ -87,23 +103,35 @@ val products =
   List(
     Product(
       name = "Internet trgovina",
-      descriptionHtml = Some(span(
-        "U skladu sa Hrvatskim zakonom i u suradnji sa servisom za vođenje paušalnog obrta ",
-        a(href := "https://pausalko.com", cls := "underline hover:font-semibold", rel := "nofollow noopener", target := "_blank", "Paušalko"),
-        " donosimo vam Internet trgovinu potpuno prilagođenu vašim potrebama."
-      )),
+      descriptionHtml = Some(
+        span(
+          "U skladu sa Hrvatskim zakonom i u suradnji sa servisom za vođenje paušalnog obrta ",
+          a(
+            href := "https://pausalko.com",
+            cls := "underline hover:font-semibold",
+            rel := "nofollow noopener",
+            target := "_blank",
+            "Paušalko"
+          ),
+          " donosimo vam Internet trgovinu potpuno prilagođenu vašim potrebama."
+        )
+      ),
       tag = WebShop
     ),
     Product(
       name = "Sustav za rezervacije",
-      description = Some("Iznamljujete apartmane ili kuću i želite ne ovisiti o drugim servisima za booking? Na jednom mjestu imajte web stranicu za prikupljanje gostiju i sustav za upravljanje rezervacijama."),
+      description = Some(
+        "Iznamljujete apartmane ili kuću i želite ne ovisiti o drugim servisima za booking? Na jednom mjestu imajte web stranicu za prikupljanje gostiju i sustav za upravljanje rezervacijama."
+      ),
       tag = BookingSystem
     ),
     Product(
       name = "Sustav za izlistaj",
-      description = Some("Geografski informacijski sustav (GIS) sa sustavom za upravljanje podacima (CMS), interaktivnom web stranicom i mobilnom aplikacijom, koji se može primjeniti na razna područja."),
+      description = Some(
+        "Geografski informacijski sustav (GIS) sa sustavom za upravljanje podacima (CMS), interaktivnom web stranicom i mobilnom aplikacijom, koji se može primjeniti na razna područja."
+      ),
       tag = DirectoryListing
-    ),
+    )
   )
 
 def itemSection(title: String, items: List[Item]) =
@@ -117,47 +145,53 @@ def itemSection(title: String, items: List[Item]) =
     cls := "mt-7 flex flex-col",
     div(
       cls := "text-content-title-color dark:text-dark-content-title-color mb-3.5",
-      h2(title),
+      h2(title)
     ),
     div(
       cls := "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full",
-      for item <- items yield
+      for item <- items
+      yield div(
+        cls := "font-medium bg-content-bg dark:bg-dark-content-bg border border-solid border-theme-bg-color dark:border-dark-theme-bg-color transition duration-300 p-5 rounded-xl hover:bg-theme-bg-color dark:hover:bg-dark-theme-bg-color hover:scale-[1.02] transform-gpu flex flex-col",
         div(
-          cls := "font-medium bg-content-bg dark:bg-dark-content-bg border border-solid border-theme-bg-color dark:border-dark-theme-bg-color transition duration-300 p-5 rounded-xl hover:bg-theme-bg-color dark:hover:bg-dark-theme-bg-color hover:scale-[1.02] transform-gpu flex flex-col",
+          cls := "flex items-center",
+          item.tag.getSvg,
           div(
-            cls := "flex items-center",
-            item.tag.getSvg,
-            div(
-              h3(item.name),
-              span(
-                cls := "text-xs font-normal",
-                item.tag.toString
-              )
+            h3(item.name),
+            span(
+              cls := "text-xs font-normal",
+              item.tag.toString
             )
-          ),
-          div(
-            cls := "text-sm grow font-normal leading-6 mt-5 pb-5 border-b border-b-solid border-b-border-color dark:border-b-dark-border-color",
-            item.descriptionHtml match
-              case Some(description) => description
-              case None => item.description match
-                case Some(description) => description
-                case None => ""
-          ),
-          div(
-            cls := "flex items-center justify-end ml-auto mt-4",
-            serviceButton
           )
+        ),
+        div(
+          cls := "text-sm grow font-normal leading-6 mt-5 pb-5 border-b border-b-solid border-b-border-color dark:border-b-dark-border-color",
+          item.descriptionHtml match
+            case Some(description) => description
+            case None =>
+              item.description match
+                case Some(description) => description
+                case None              => ""
+        ),
+        div(
+          cls := "flex items-center justify-end ml-auto mt-4",
+          serviceButton
         )
+      )
     )
   )
 
-val featuredReferences = renderReferences(references.take(6), "Istaknute reference", isFeatured = true)
+val featuredReferences =
+  renderReferences(references.take(6), "Istaknute reference", isFeatured = true)
 
 val home = Seq(
-    heroSection,
-    featuredReferences,
-    itemSection("Usluge", services),
-    itemSection("Proizvodi", products)
-  )
+  heroSection,
+  featuredReferences,
+  itemSection("Usluge", services),
+  itemSection("Proizvodi", products)
+)
 
-def homePage = defaultLayout(home, activeRoute = Route.Home, metaTitle = "Izrada web stranica")
+def homePage = defaultLayout(
+  home,
+  activeRoute = Route.Home,
+  metaTitle = "Izrada web stranica"
+)

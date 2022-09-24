@@ -1,5 +1,22 @@
 package eu.izradaweba.generativeBigSurWaves
 
+/* Credits:
+  - https://codepen.io/georgedoescode/pen/bGBzGKZ (Generative macOS Big Sur waves - codepen)
+  - https://stackoverflow.com/questions/36721830/convert-hsl-to-rgb-and-hex (hsl to hex - function)
+  - https://github.com/georgedoescode/generative-utils (A collection of handy generative art utilities - library)
+  - https://github.com/bgrins/TinyColor (Fast, small color manipulation and conversion for JavaScript - library)
+  - https://www.w3schools.com/colors/colors_hsl.asp (HSL Calculator - utility) */
+
+/* Summary:
+  I have took the codepen SVG generation code and libraries and have converted it to a scala package (this file) which
+  can generate random Big Sur waves as SVG (scalatags) which can then be included in the website to avoid FOUC - Flash
+  of unstyled content. The code producted (this file) is not a 100% copy of the code from the libraries and the resulting
+  SVG is not 100% the same. I first started with Ints, then Floats, and have ended on using Doubles everywhere. I've
+  modified the darken from 50 to 40 as it was producing strange colors. */
+
+/* Future:
+  I want to somehow animate the SVG waves on the client side, but don't know if that is possible yet. */
+
 import java.awt.Color
 import java.util.Date
 import scala.util.Random
@@ -41,16 +58,16 @@ import scalatags.Text.svgAttrs.{
   stopColor
 }
 
-def map(n: Int, start1: Float, end1: Float, start2: Float, end2: Float) =
+def map(n: Int, start1: Double, end1: Double, start2: Double, end2: Double) =
   ((n - start1) / (end1 - start1)) * (end2 - start2) + start2
 
-def lerp(v0: Float, v1: Float, t: Float) =
+def lerp(v0: Double, v1: Double, t: Double) =
   v0 * (1 - t) + v1 * t;
 
-val width = 1920
-val height = 1080
+val width = 1920.0
+val height = 1080.0
 
-case class Point(x: Float, y: Float)
+case class Point(x: Double, y: Double)
 
 def formatPoints(points: Vector[Point], close: Boolean) =
   val points1 = points.flatMap(point => Vector(point.x, point.y))
@@ -69,7 +86,7 @@ def formatPoints(points: Vector[Point], close: Boolean) =
   else points1
 
 def spline(
-    points0: IndexedSeq[Point],
+    points0: Seq[Point],
     tension: Int = 1,
     close: Boolean = false
 ) =
@@ -111,12 +128,12 @@ def spline(
   path
 
 def wave(start: Point, end: Point, gradientId: String) =
-  val numSteps = Random.between(4, 8)
+  val numSteps = Math.round(Random.between(4.0, 8.0))
   val randomRange = Random.between(32, 64)
 
   val points =
-    for i <- 0 to numSteps yield
-      val step = map(i, 0, numSteps.toFloat, 0, 1)
+    for i <- 0 to numSteps.toInt yield
+      val step = map(i, 0, numSteps, 0, 1)
 
       var x = lerp(start.x, end.x, step)
       var y = lerp(start.y, end.y, step)
@@ -128,17 +145,21 @@ def wave(start: Point, end: Point, gradientId: String) =
       Point(x, y)
 
   val pathData =
-    spline(points, 1, false) + s"L ${end.x.toInt} $height L ${start.x.toInt} $height Z"
+    spline(
+      points,
+      1,
+      false
+    ) + s"L ${end.x.toInt} $height L ${start.x.toInt} $height Z"
 
   path(
     d := pathData,
     fill := s"url(#$gradientId)"
   )
 
-def clamp01(value: Float) =
+def clamp01(value: Double) =
   Math.min(1, Math.max(0, value))
 
-case class Hsl(hue: Int, saturation: Float, lightness: Float):
+case class Hsl(hue: Int, saturation: Double, lightness: Double):
   if (hue > 360)
     throw new IllegalArgumentException("Hue cannot be higher than 360")
 
@@ -157,17 +178,17 @@ case class Hsl(hue: Int, saturation: Float, lightness: Float):
 
     this +: res
 
-  def darken(amount: Float = 10) =
+  def darken(amount: Double = 10) =
     val lightness = clamp01((this.lightness / 100) - (amount / 100))
 
     this.copy(lightness = lightness * 100)
 
-  def desaturate(amount: Float = 10) =
-    val saturation = clamp01((this.saturation / 100) - amount / 100)
+  def desaturate(amount: Double = 10) =
+    val saturation = clamp01((this.saturation / 100) - (amount / 100))
 
     this.copy(saturation = saturation * 100)
 
-  def lighten(amount: Float = 10) =
+  def lighten(amount: Double = 10) =
     val lightness = clamp01((this.lightness / 100) + (amount / 100))
 
     this.copy(lightness = lightness * 100)
@@ -190,7 +211,7 @@ case class Hsl(hue: Int, saturation: Float, lightness: Float):
     val l = this.lightness / 100
     val a = this.saturation * Math.min(l, 1 - l) / 100
 
-    val f = (n: Float) =>
+    val f = (n: Double) =>
       val k = (n + this.hue / 30) % 12
       val color = l - a * Math.max(List(k - 3, 9 - k, 1).min, -1)
 
@@ -199,7 +220,7 @@ case class Hsl(hue: Int, saturation: Float, lightness: Float):
     s"#${f(0)}${f(8)}${f(4)}"
 
 def generate =
-  val numWaves = 7
+  val numWaves = 7.0
   val baseHsl = Hsl(Random.between(0, 360), 65, 55)
   val colors = baseHsl.analogous(6)
 
@@ -213,26 +234,26 @@ def generate =
       fill := getRandomColor.darken(40).toString
     )
 
-  var gradients: IndexedSeq[ConcreteHtmlTag[String]] = IndexedSeq()
+  var gradients: Seq[ConcreteHtmlTag[String]] = Seq()
 
   val waves =
-    for i <- 0 to numWaves - 1 yield
+    for i <- 0 to numWaves.toInt - 1 yield
       val randomOffset = Random.between(-50, 50)
       val originY =
         map(
           i,
           0,
-          numWaves.toFloat,
-          -height.toFloat / 2,
-          height.toFloat / 3
+          numWaves,
+          -height / 2,
+          height / 3
         ) + randomOffset
-      val endY = map(i, 0, numWaves.toFloat, 0, 1000) + randomOffset
+      val endY = map(i, 0, numWaves, 0, 1000) + randomOffset
 
       val color =
-        if i < 3 then getRandomColor.darken(50).desaturate(10)
+        if i < 3 then getRandomColor.darken(40).desaturate(10)
         else getRandomColor
 
-      val gradientOffset = map(i, 0, numWaves.toFloat, 0.1, 1)
+      val gradientOffset = map(i, 0, numWaves, 0.1, 1)
 
       val gradientId = s"SvgjsLinearGradient100$i"
 
@@ -257,7 +278,7 @@ def generate =
 
       gradients = gradients :+ gradient
 
-      wave(Point(0, originY), Point(width.toFloat, endY), gradientId)
+      wave(Point(0, originY), Point(width, endY), gradientId)
 
   svg(
     id := "canvas",

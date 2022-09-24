@@ -7,7 +7,8 @@ import eu.izradaweba.layouts.defaultLayout
 import eu.izradaweba.partials.renderReferences
 
 val index = Seq(
-    renderReferences(references, "Reference", headingTag = h1),
-  )
+  renderReferences(references, "Reference", headingTag = h1)
+)
 
-def referencesPage = defaultLayout(index, activeRoute = Route.References, metaTitle = "Reference")
+def referencesPage =
+  defaultLayout(index, activeRoute = Route.References, metaTitle = "Reference")

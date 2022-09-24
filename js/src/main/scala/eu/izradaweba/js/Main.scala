@@ -1,6 +1,16 @@
 package eu.izradaweba.js
 
-import org.scalajs.dom.{Element, Event, EventTarget, MediaQueryList, MediaQueryListListener, MouseEvent, document, window, HTMLCollection}
+import org.scalajs.dom.{
+  Element,
+  Event,
+  EventTarget,
+  MediaQueryList,
+  MediaQueryListListener,
+  MouseEvent,
+  document,
+  window,
+  HTMLCollection
+}
 
 val darkClass = "dark"
 val lightClass = "light"
@@ -45,17 +55,16 @@ def setAutomaticTheme(theme: ThemeInterface, darkTheme: Boolean = false): Unit =
   darkSvg.classList.add(hiddenClass)
   lightSvg.classList.add(hiddenClass)
 
-  if darkTheme then
-    addDarkClassToBody()
-  else
-    removeDarkClassFromBody()
+  if darkTheme then addDarkClassToBody()
+  else removeDarkClassFromBody()
 
 def setupMobileNavbarToggle(): Unit =
   val mobileNavbar = document.getElementById("mobile-navbar")
   val mobileNavbarToggle = document.getElementById("mobile-navbar-toggle")
 
-  mobileNavbarToggle.addEventListener("click", (_: MouseEvent) =>
-    mobileNavbar.classList.toggle(hiddenClass)
+  mobileNavbarToggle.addEventListener(
+    "click",
+    (_: MouseEvent) => mobileNavbar.classList.toggle(hiddenClass)
   )
 
 def setupModal(): Unit =
@@ -65,22 +74,26 @@ def setupModal(): Unit =
   val popupCloseTriggers = closedPopup.getElementsByClassName("close-pop-up")
 
   popupCloseTriggers.foreach(popupCloseTrigger =>
-    popupCloseTrigger.addEventListener("click", (_: MouseEvent) =>
-      overlayApp.classList.add("invisible")
-      overlayApp.classList.add("opacity-0")
-      closedPopup.classList.add("invisible")
-      closedPopup.classList.add("opacity-0")
+    popupCloseTrigger.addEventListener(
+      "click",
+      (_: MouseEvent) =>
+        overlayApp.classList.add("invisible")
+        overlayApp.classList.add("opacity-0")
+        closedPopup.classList.add("invisible")
+        closedPopup.classList.add("opacity-0")
     )
   )
 
   val popupOpenTriggers = document.getElementsByClassName("open-pop-up")
 
   popupOpenTriggers.foreach(popupOpenTrigger =>
-    popupOpenTrigger.addEventListener("click", (_: MouseEvent) =>
-      overlayApp.classList.remove("invisible")
-      overlayApp.classList.remove("opacity-0")
-      closedPopup.classList.remove("invisible")
-      closedPopup.classList.remove("opacity-0")
+    popupOpenTrigger.addEventListener(
+      "click",
+      (_: MouseEvent) =>
+        overlayApp.classList.remove("invisible")
+        overlayApp.classList.remove("opacity-0")
+        closedPopup.classList.remove("invisible")
+        closedPopup.classList.remove("opacity-0")
     )
   )
 
@@ -88,61 +101,58 @@ def setupModal(): Unit =
 def enableThemeSwitching(theme: ThemeInterface): Unit =
   val themeSwitchButton = document.getElementById("theme-switch")
 
-  themeSwitchButton.addEventListener("click", (_: MouseEvent) =>
-    val localStorageTheme = getLocalStorageTheme
+  themeSwitchButton.addEventListener(
+    "click",
+    (_: MouseEvent) =>
+      val localStorageTheme = getLocalStorageTheme
 
-    // automatic -> dark
-    if localStorageTheme == null then
-      setDarkTheme(theme)
+      // automatic -> dark
+      if localStorageTheme == null then
+        setDarkTheme(theme)
 
-      // Whenever the user explicitly chooses dark mode
-      window.localStorage.setItem("theme", darkClass)
+        // Whenever the user explicitly chooses dark mode
+        window.localStorage.setItem("theme", darkClass)
 
-    // dark -> light
-    else if localStorageTheme == darkClass then
-      setLightTheme(theme)
+      // dark -> light
+      else if localStorageTheme == darkClass then
+        setLightTheme(theme)
 
-      // Whenever the user explicitly chooses light mode
-      window.localStorage.setItem("theme", lightClass)
+        // Whenever the user explicitly chooses light mode
+        window.localStorage.setItem("theme", lightClass)
 
-    // light -> automatic (dark/light)
-    else if localStorageTheme == lightClass then
-      if theme.prefersDark.matches then
-        setAutomaticTheme(theme, darkTheme = true)
-      else
-        setAutomaticTheme(theme)
+      // light -> automatic (dark/light)
+      else if localStorageTheme == lightClass then
+        if theme.prefersDark.matches then
+          setAutomaticTheme(theme, darkTheme = true)
+        else setAutomaticTheme(theme)
 
-      // Whenever the user explicitly chooses to respect the OS preference
-      window.localStorage.removeItem("theme")
+        // Whenever the user explicitly chooses to respect the OS preference
+        window.localStorage.removeItem("theme")
   )
 
 def applyTheme(theme: ThemeInterface): Unit =
   val localStorageTheme = getLocalStorageTheme
 
-  println(theme.prefersDark)
-
-  if localStorageTheme == lightClass then
-    setLightTheme(theme)
-  else if localStorageTheme == darkClass then
-    setDarkTheme(theme)
+  if localStorageTheme == lightClass then setLightTheme(theme)
+  else if localStorageTheme == darkClass then setDarkTheme(theme)
   else if theme.prefersDark.matches then
     setAutomaticTheme(theme, darkTheme = true)
-  else
-    setAutomaticTheme(theme)
+  else setAutomaticTheme(theme)
 
 def detectThemeChange(theme: ThemeInterface): Unit =
-  println(theme.prefersDark)
-  theme.prefersDark.asInstanceOf[EventTarget].addEventListener("change", (e: MediaQueryList) =>
-    val localStorageTheme = getLocalStorageTheme
+  theme.prefersDark
+    .asInstanceOf[EventTarget]
+    .addEventListener(
+      "change",
+      (e: MediaQueryList) =>
+        val localStorageTheme = getLocalStorageTheme
 
-    localStorageTheme match
-      case null =>
-        if e.matches then
-          setAutomaticTheme(theme, darkTheme = true)
-        else
-          setAutomaticTheme(theme)
-      case _ => ()
-  )
+        localStorageTheme match
+          case null =>
+            if e.matches then setAutomaticTheme(theme, darkTheme = true)
+            else setAutomaticTheme(theme)
+          case _ => ()
+    )
 
 def setupThemeSwitcher(prefersDark0: MediaQueryList): Unit =
   object Theme extends ThemeInterface:
@@ -161,19 +171,15 @@ def setupThemeSwitcher(prefersDark0: MediaQueryList): Unit =
   val localStorageTheme = getLocalStorageTheme
   val prefersDark = window.matchMedia("(prefers-color-scheme: dark)")
 
-  println(prefersDark)
+  if localStorageTheme == lightClass then removeDarkClassFromBody()
+  else if localStorageTheme == darkClass then addDarkClassToBody()
+  else if prefersDark.matches then addDarkClassToBody()
+  else removeDarkClassFromBody()
 
-  if localStorageTheme == lightClass then
-    removeDarkClassFromBody()
-  else if localStorageTheme == darkClass then
-    addDarkClassToBody()
-  else if prefersDark.matches then
-    addDarkClassToBody()
-  else
-    removeDarkClassFromBody()
-
-  document.addEventListener("DOMContentLoaded", (_: Event) =>
-    setupMobileNavbarToggle()
-    setupModal()
-    setupThemeSwitcher(prefersDark)
+  document.addEventListener(
+    "DOMContentLoaded",
+    (_: Event) =>
+      setupMobileNavbarToggle()
+      setupModal()
+      setupThemeSwitcher(prefersDark)
   )

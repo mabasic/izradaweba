@@ -13,12 +13,12 @@ enum Tag(val tag: String):
 
   def getSvg: TypedTag[String] =
     this match
-      case WebShop => svgs.webShop
-      case BusinessApp => svgs.businessApp
+      case WebShop          => svgs.webShop
+      case BusinessApp      => svgs.businessApp
       case DirectoryListing => svgs.directoryListing
-      case BookingSystem => svgs.bookingSystem
-      case CustomSoftware => svgs.customSoftware
-      case WebStandard => svgs.webStandard
+      case BookingSystem    => svgs.bookingSystem
+      case CustomSoftware   => svgs.customSoftware
+      case WebStandard      => svgs.webStandard
 
   override def toString: String =
     s"#$tag"

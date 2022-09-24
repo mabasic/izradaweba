@@ -3,7 +3,12 @@ package eu.izradaweba.partials
 import eu.izradaweba.{Route, Reference, Tag}
 import scalatags.Text.all.*
 
-def renderReferences(references: List[Reference], heading: String, headingTag: ConcreteHtmlTag[String] = h2, isFeatured: Boolean = false) =
+def renderReferences(
+    references: List[Reference],
+    heading: String,
+    headingTag: ConcreteHtmlTag[String] = h2,
+    isFeatured: Boolean = false
+) =
   def tag(tag: Tag) =
     span(
       cls := "ml-auto w-32 relative font-normal md:hidden text-xs",
@@ -19,7 +24,7 @@ def renderReferences(references: List[Reference], heading: String, headingTag: C
   def itemHeading(reference: Reference) =
     val url = reference.url match
       case Some(url) => url.toString
-      case None => "#"
+      case None      => "#"
 
     div(
       a(
@@ -58,21 +63,20 @@ def renderReferences(references: List[Reference], heading: String, headingTag: C
             "Pogledajte sve reference"
           )
         )
-      else
-        ""
+      else ""
     ),
     ul(
       cls := "flex flex-col w-full h-full justify-around bg-theme-bg-color dark:bg-dark-content-bg pl-0 m-0 rounded-xl border border-solid border-theme-bg-color dark:border-dark-theme-bg-color",
-      for reference <- references yield
-        li(
-          cls := "transition duration-300 transform-gpu first:rounded-t-xl last:rounded-b-xl hover:bg-theme-bg-color dark:hover:bg-dark-theme-bg-color flex items-center w-full h-full whitespace-nowrap py-2.5 px-4 text-base border-t border-t-solid border-t-border-color dark:border-t-dark-border-color first:border-0",
-          div(
-            cls := "flex items-center w-36",
-            reference.tag.getSvg,
-            itemHeading(reference)
-          ),
-          itemTag(reference.tag),
-          itemActions
-        )
+      for reference <- references
+      yield li(
+        cls := "transition duration-300 transform-gpu first:rounded-t-xl last:rounded-b-xl hover:bg-theme-bg-color dark:hover:bg-dark-theme-bg-color flex items-center w-full h-full whitespace-nowrap py-2.5 px-4 text-base border-t border-t-solid border-t-border-color dark:border-t-dark-border-color first:border-0",
+        div(
+          cls := "flex items-center w-36",
+          reference.tag.getSvg,
+          itemHeading(reference)
+        ),
+        itemTag(reference.tag),
+        itemActions
+      )
     )
   )

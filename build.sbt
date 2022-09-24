@@ -23,4 +23,5 @@ lazy val js = (project in file("js"))
     jsEnv := new org.scalajs.jsenv.jsdomnodejs.JSDOMNodeJSEnv(),
     Compile / fastLinkJS / scalaJSLinkerOutputDirectory := baseDirectory.value / "../src/main/resources/js",
     Compile / fullLinkJS / scalaJSLinkerOutputDirectory := baseDirectory.value / "../src/main/resources/js"
-  ).enablePlugins(ScalaJSPlugin)
+  )
+  .enablePlugins(ScalaJSPlugin)
