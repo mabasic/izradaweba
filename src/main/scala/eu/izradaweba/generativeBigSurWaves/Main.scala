@@ -5,17 +5,16 @@ package eu.izradaweba.generativeBigSurWaves
   - https://stackoverflow.com/questions/36721830/convert-hsl-to-rgb-and-hex (hsl to hex - function)
   - https://github.com/georgedoescode/generative-utils (A collection of handy generative art utilities - library)
   - https://github.com/bgrins/TinyColor (Fast, small color manipulation and conversion for JavaScript - library)
-  - https://www.w3schools.com/colors/colors_hsl.asp (HSL Calculator - utility) */
+  - https://www.w3schools.com/colors/colors_hsl.asp (HSL Calculator - utility)
+  - https://codeburst.io/svg-morphing-the-easy-way-and-the-hard-way-c117a620b65f (SVG animate tag - tutorial) */
 
 /* Summary:
   I have took the codepen SVG generation code and libraries and have converted it to a scala package (this file) which
   can generate random Big Sur waves as SVG (scalatags) which can then be included in the website to avoid FOUC - Flash
   of unstyled content. The code produced (this file) is not a 100% copy of the code from the libraries and the resulting
   SVG is not 100% the same. I first started with Ints, then Floats, and have ended on using Doubles everywhere. I've
-  modified the darken from 50 to 40 as it was producing strange colors. */
-
-/* Future:
-  I want to somehow addAnimation the SVG waves on the client side, but don't know if that is possible yet. */
+  modified the darken from 50 to 40 as it was producing strange colors. The waves are now animated by default using the
+  animate tag. */
 
 import java.awt.Color
 import java.util.Date
@@ -167,13 +166,12 @@ def wave(
     fill := s"url(#$gradientId)",
     if addAnimation then
       animate(
-        dur := "5s",
+        dur := "4s",
         repeatCount := "indefinite",
         attributeName := "d",
         values := s"$wave1Path;$waveAnimatedPath;$wave1Path",
-//        fill := "freeze",
         calcMode := "spline",
-        keySplines := "0.4 0 0.2 1; 0.4 0 0.2 1"
+        keySplines := "0.29 0.32 0.33 0.95; 0.29 0.32 0.33 0.95"
       )
     else ""
   )
@@ -184,6 +182,10 @@ def clamp01(value: Double) =
 case class Hsl(hue: Int, saturation: Double, lightness: Double):
   if (hue > 360)
     throw new IllegalArgumentException("Hue cannot be higher than 360")
+  if (saturation > 100)
+    throw new IllegalArgumentException("Saturation cannot be higher than 100")
+  if (lightness > 100)
+    throw new IllegalArgumentException("Lightness cannot be higher than 100")
 
   def analogous(results: Int = 6): Seq[Hsl] =
     val slices = 30
