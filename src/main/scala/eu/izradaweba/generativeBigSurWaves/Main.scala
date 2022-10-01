@@ -11,7 +11,7 @@ package eu.izradaweba.generativeBigSurWaves
 /* Summary:
   I have took the codepen SVG generation code and libraries and have converted it to a scala package (this file) which
   can generate random Big Sur waves as SVG (scalatags) which can then be included in the website to avoid FOUC - Flash
-  of unstyled content. The code produced (this file) is not a 100% copy of the code from the libraries and the resulting
+  of un-styled content. The code produced (this file) is not a 100% copy of the code from the libraries and the resulting
   SVG is not 100% the same. I first started with Ints, then Floats, and have ended on using Doubles everywhere. I've
   modified the darken from 50 to 40 as it was producing strange colors. The waves are now animated by default using the
   animate tag. */
@@ -144,7 +144,7 @@ def wave(
 
   def points =
     for i <- 0 to numSteps.toInt yield
-      val step = map(i, 0, numSteps, 0, 1)
+      val step = map(i, 0, numSteps.toDouble, 0, 1)
 
       var x = lerp(start.x, end.x, step)
       var y = lerp(start.y, end.y, step)

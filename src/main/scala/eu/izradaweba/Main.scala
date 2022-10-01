@@ -14,11 +14,13 @@ import org.http4s.server.staticcontent.*
 import eu.izradaweba.pages.{homePage, referencesPage}
 import org.http4s.Charset.`UTF-8`
 import org.http4s.headers.`Content-Type`
+//import org.http4s.scalatags._
 
 object Main extends IOApp {
 
   def routeService: HttpRoutes[IO] = HttpRoutes.of[IO] {
     case GET -> Route.Home.url =>
+      // Ok(homePage)
       Ok(homePage.render, `Content-Type`(MediaType.text.html, `UTF-8`))
     case GET -> Route.References.url =>
       Ok(referencesPage.render, `Content-Type`(MediaType.text.html, `UTF-8`))

@@ -2,7 +2,7 @@ ThisBuild / version := "0.1.0-SNAPSHOT"
 ThisBuild / scalaVersion := "3.2.0"
 ThisBuild / organization := "eu.izradaweba"
 
-//ThisBuild / scalacOptions ++= Seq("-deprecated")
+ThisBuild / scalacOptions ++= Seq("-deprecation")
 
 val http4sVersion = "1.0.0-M35"
 
@@ -12,8 +12,9 @@ lazy val root = (project in file("."))
     libraryDependencies += "org.http4s" %% "http4s-dsl" % http4sVersion,
     libraryDependencies += "org.http4s" %% "http4s-ember-server" % http4sVersion,
     libraryDependencies += "org.http4s" %% "http4s-scalatags" % http4sVersion,
-    libraryDependencies += "com.lihaoyi" %% "scalatags" % "0.11.1",
-    libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.4.1"
+    libraryDependencies += "com.lihaoyi" %% "scalatags" % "0.12.0",
+    libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.4.1",
+    libraryDependencies += "org.http4s" %% "http4s-scalatags" % http4sVersion
   )
 
 lazy val js = (project in file("js"))
