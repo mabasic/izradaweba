@@ -38,6 +38,7 @@ import scalatags.Text.svgAttrs.{
 import eu.izradaweba.{Route, svgs}
 import org.http4s.Uri.Path
 import eu.izradaweba.generativeBigSurWaves.{generate => generateBigSurWaves}
+import eu.izradaweba.{typography => typo}
 
 import java.net.URL
 
@@ -268,55 +269,23 @@ val overlay =
   )
 
 val footer =
-  /** It returns a search engine optimized HTML `a` tag which points to an
-    * external URL.
-    *
-    * @param text
-    *   The text which is displayed on the link.
-    * @param url
-    *   The URL to which the link points to.
-    * @param includeRel
-    *   By setting this to false the link does not include the SEO optimization.
-    *   Useful when the outgoing link points to your own website.
-    * @return
-    *   It returns a scalatags tag.
-    */
-  def outboundFooterLink(text: String, url: URL, includeRel: Boolean = true) =
-    a(
-      cls := "underline",
-      href := url.toString,
-      if includeRel then rel := "nofollow noopener"
-      else "",
-      text
-    )
-
-  def footerLink(text: String, path: Path) =
-    a(
-      cls := "underline mr-2",
-      href := path.toString,
-      text
-    )
-
-  def routeLink(route: Route) =
-    footerLink(route.name, route.url)
-
   div(
     cls := "flex flex-col lg:flex-row justify-between text-theme-color dark:text-dark-theme-color py-5 px-10 items-start lg:items-center",
     div(
       cls := "text-xs",
       "©️ Mario Bašić 2011-2022. Sva prava pridržana. Napravljeno sa ",
-      outboundFooterLink("Scala", URL("https://scala-lang.org")),
+      typo.outboundLink("Scala", URL("https://scala-lang.org")),
       " i ",
-      outboundFooterLink("Tailwind CSS", URL("https://tailwindcss.com")),
+      typo.outboundLink("Tailwind CSS", URL("https://tailwindcss.com")),
       "."
     ),
     div(
       cls := "text-xs mt-2 lg:mt-0 flex items-center justify-between",
       div(
         cls := "mr-2",
-        routeLink(Route.PrivacyNotice),
-        routeLink(Route.Credits),
-        outboundFooterLink(
+        typo.routeLink(Route.PrivacyNotice),
+        typo.routeLink(Route.Credits),
+        typo.outboundLink(
           "Izvorni kod",
           URL("https://github.com/mabasic/izradaweba"),
           includeRel = false
@@ -393,6 +362,7 @@ def defaultLayout(
           content := "width=device-width, initial-scale=1.0"
         ),
         link(href := "/assets/css/index.css", rel := "stylesheet"),
+//        script(src := "https://plausible.laravelista.com/js/plausible.js", async, defer, attr("data-domain") := "izradaweba.eu"),
         script(src := "/assets/js/main.js"),
         bgMode match
           case GenerativeBigSurWavesJS =>
