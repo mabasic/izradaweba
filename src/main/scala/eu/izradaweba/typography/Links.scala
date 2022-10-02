@@ -10,14 +10,14 @@ import java.net.URL
   * external URL.
   *
   * @param text
-  * The text which is displayed on the link.
+  *   The text which is displayed on the link.
   * @param url
-  * The URL to which the link points to.
+  *   The URL to which the link points to.
   * @param includeRel
-  * By setting this to false the link does not include the SEO optimization.
-  * Useful when the outgoing link points to your own website.
+  *   By setting this to false the link does not include the SEO optimization.
+  *   Useful when the outgoing link points to your own website.
   * @return
-  * It returns a scalatags tag.
+  *   It returns a scalatags tag.
   */
 def outboundLink(text: String, url: URL, includeRel: Boolean = true) =
   a(

@@ -50,7 +50,10 @@ val index = Seq(
         text = "Plausible Analytics"
       ),
       " for the purpose of collecting and analyzing website visit frequency. It is an open source web analytics software, built in the EU, with no cookies, no tracking and no personal data collection. ",
-      typo.outboundLink(url = URL("https://plausible.laravelista.com/izradaweba.eu"), text = "Stats are open to the public.")
+      typo.outboundLink(
+        url = URL("https://plausible.laravelista.com/izradaweba.eu"),
+        text = "Stats are open to the public."
+      )
     ),
     h2(
       cls := "text-2xl font-bold mt-5",

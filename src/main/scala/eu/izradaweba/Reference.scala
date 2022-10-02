@@ -212,5 +212,5 @@ val references =
       WebStandard,
       Some(URL("https://odvjetnik-vjeran-paic.com/")),
       yearMade = 2011
-    ),
+    )
   )
