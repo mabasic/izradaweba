@@ -35,7 +35,7 @@ import scalatags.Text.svgAttrs.{
   y2,
   preserveAspectRatio
 }
-import eu.izradaweba.{Route, svgs}
+import eu.izradaweba.{Route, svgs, Config}
 import org.http4s.Uri.Path
 import eu.izradaweba.generativeBigSurWaves.{generate => generateBigSurWaves}
 import eu.izradaweba.{typography => typo}
@@ -362,7 +362,9 @@ def defaultLayout(
           content := "width=device-width, initial-scale=1.0"
         ),
         link(href := "/assets/css/index.css", rel := "stylesheet"),
-//        script(src := "https://plausible.laravelista.com/js/plausible.js", async, defer, attr("data-domain") := "izradaweba.eu"),
+        Config.analyticsEnabled match
+          case true => script(src := "https://plausible.laravelista.com/js/plausible.js", async, defer, attr("data-domain") := "izradaweba.eu")
+          case _ => "",
         script(src := "/assets/js/main.js"),
         bgMode match
           case GenerativeBigSurWavesJS =>

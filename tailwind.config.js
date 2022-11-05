@@ -45,7 +45,7 @@ module.exports = {
         'dark-content-title-color': '#999ba5',
         'dark-dark-light-svg': '#ffce45',
         'dark-dropdown-bg': '#21242d',
-        'dark-inactive-color': 'rgb(113 119 144 / 80%)',
+        'dark-inactive-color': 'rgba(255,255,255, 0.5)', // rgb(113 119 144 / 80%)
         'dark-popup-bg': 'rgb(22 25 37)',
         'dark-popup-box-shadow': 'rgba(0, 0, 0, 0.4)',
         'dark-scrollbar-bg': 'rgb(1 2 3 / 40%)',
