@@ -9,7 +9,7 @@ import eu.izradaweba.typography as typo
 
 import java.net.URL
 
-val index = Seq(
+val privacyNoticePageContent = Seq(
   div(
     cls := "text-base font-normal bg-content-bg dark:bg-dark-content-bg border border-solid border-theme-bg-color dark:border-dark-theme-bg-color transition duration-300 p-5 rounded-xl flex flex-col",
     h1(
@@ -84,7 +84,7 @@ val index = Seq(
 
 def privacyNoticePage =
   defaultLayout(
-    index,
+    privacyNoticePageContent,
     activeRoute = Route.PrivacyNotice,
     metaTitle = "Izjava o privatnosti"
   )

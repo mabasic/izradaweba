@@ -1,6 +1,6 @@
 package eu.izradaweba.svgs
 
-import scalatags.Text.all._
+import scalatags.Text.all.*
 import scalatags.Text.svgTags.{svg, path}
 import scalatags.Text.svgAttrs.{xmlns, viewBox, d}
 

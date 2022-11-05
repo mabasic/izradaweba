@@ -64,7 +64,7 @@ case class Service(
 ) extends Item
 
 val services =
-  import eu.izradaweba.Tag._
+  import eu.izradaweba.Tag.*
 
   List(
     Service(
@@ -98,7 +98,7 @@ case class Product(
 ) extends Item
 
 val products =
-  import eu.izradaweba.Tag._
+  import eu.izradaweba.Tag.*
 
   List(
     Product(

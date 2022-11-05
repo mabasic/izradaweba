@@ -337,7 +337,7 @@ enum BgMode:
   // This is the codepen code which generates big sur waves svg
   case GenerativeBigSurWavesJS
 
-import BgMode._
+import BgMode.*
 
 def defaultLayout(
     children: Seq[ConcreteHtmlTag[String]],

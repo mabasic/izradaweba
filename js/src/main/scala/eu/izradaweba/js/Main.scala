@@ -31,7 +31,7 @@ def removeDarkClassFromBody(): Unit =
   document.documentElement.classList.remove(darkClass)
 
 def setLightTheme(theme: ThemeInterface): Unit =
-  import theme._
+  import theme.*
 
   removeDarkClassFromBody()
 
@@ -40,7 +40,7 @@ def setLightTheme(theme: ThemeInterface): Unit =
   lightSvg.classList.remove(hiddenClass)
 
 def setDarkTheme(theme: ThemeInterface): Unit =
-  import theme._
+  import theme.*
 
   addDarkClassToBody()
 
@@ -49,7 +49,7 @@ def setDarkTheme(theme: ThemeInterface): Unit =
   lightSvg.classList.add(hiddenClass)
 
 def setAutomaticTheme(theme: ThemeInterface, darkTheme: Boolean = false): Unit =
-  import theme._
+  import theme.*
 
   automaticSvg.classList.remove(hiddenClass)
   darkSvg.classList.add(hiddenClass)

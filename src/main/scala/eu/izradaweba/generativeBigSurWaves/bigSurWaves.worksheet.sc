@@ -1,5 +1,5 @@
 import eu.izradaweba.generativeBigSurWaves.*
-import scalatags.Text.all._
+import scalatags.Text.all.*
 import scalatags.Text.svgTags.{
   circle,
   defs,

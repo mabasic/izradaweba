@@ -12,7 +12,7 @@ case class Reference(
 )
 
 val references =
-  import Tag._
+  import Tag.*
 
   List(
     Reference(

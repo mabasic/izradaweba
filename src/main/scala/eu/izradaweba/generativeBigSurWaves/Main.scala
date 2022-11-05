@@ -19,7 +19,7 @@ package eu.izradaweba.generativeBigSurWaves
 import java.awt.Color
 import java.util.Date
 import scala.util.Random
-import scalatags.Text.all._
+import scalatags.Text.all.*
 import scalatags.Text.svgTags.{
   circle,
   defs,

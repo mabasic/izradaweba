@@ -14,7 +14,7 @@ import org.http4s.server.staticcontent.*
 import eu.izradaweba.pages.{homePage, referencesPage, privacyNoticePage}
 import org.http4s.Charset.`UTF-8`
 import org.http4s.headers.`Content-Type`
-//import org.http4s.scalatags._
+//import org.http4s.scalatags.*
 
 object Main extends IOApp {
 

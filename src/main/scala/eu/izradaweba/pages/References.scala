@@ -1,12 +1,12 @@
 package eu.izradaweba.pages
 
-import scalatags.Text.all._
+import scalatags.Text.all.*
 
 import eu.izradaweba.{Route, references}
 import eu.izradaweba.layouts.defaultLayout
 import eu.izradaweba.partials.renderReferences
 
-val index = Seq(
+val referencesPageContent = Seq(
   renderReferences(
     references
       .sortBy(_.name)
@@ -19,4 +19,4 @@ val index = Seq(
 )
 
 def referencesPage =
-  defaultLayout(index, activeRoute = Route.References, metaTitle = "Reference")
+  defaultLayout(referencesPageContent, activeRoute = Route.References, metaTitle = "Reference")
