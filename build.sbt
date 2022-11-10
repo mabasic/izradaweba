@@ -9,6 +9,7 @@ val http4sVersion = "1.0.0-M35"
 lazy val root = (project in file("."))
   .settings(
     name := "Website",
+    run / fork := true,
     libraryDependencies += "org.http4s" %% "http4s-dsl" % http4sVersion,
     libraryDependencies += "org.http4s" %% "http4s-ember-server" % http4sVersion,
     libraryDependencies += "org.http4s" %% "http4s-scalatags" % http4sVersion,
@@ -28,3 +29,4 @@ lazy val js = (project in file("js"))
     Compile / fullLinkJS / scalaJSLinkerOutputDirectory := baseDirectory.value / "../src/main/resources/js"
   )
   .enablePlugins(ScalaJSPlugin)
+  .disablePlugins(RevolverPlugin)
