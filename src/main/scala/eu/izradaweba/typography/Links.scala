@@ -21,7 +21,7 @@ import java.net.URL
   */
 def outboundLink(text: String, url: URL, includeRel: Boolean = true) =
   a(
-    cls := "underline",
+    cls := "underline hover:no-underline",
     href := url.toString,
     if includeRel then rel := "nofollow noopener"
     else "",
@@ -30,7 +30,7 @@ def outboundLink(text: String, url: URL, includeRel: Boolean = true) =
 
 def link(text: String, path: Path) =
   a(
-    cls := "underline mr-2",
+    cls := "underline hover:no-underline mr-2",
     href := path.toString,
     text
   )

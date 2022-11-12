@@ -8,6 +8,7 @@ import scalatags.Text.svgAttrs.{d, viewBox, fill}
 import eu.izradaweba.layouts.defaultLayout
 import eu.izradaweba.{Route, Reference, Tag, references, svgs}
 import eu.izradaweba.partials.renderReferences
+import eu.izradaweba.typography as typo
 
 import java.net.URL
 
@@ -106,13 +107,7 @@ val products =
       descriptionHtml = Some(
         span(
           "U skladu sa Hrvatskim zakonom i u suradnji sa servisom za vođenje paušalnog obrta ",
-          a(
-            href := "https://pausalko.com",
-            cls := "underline hover:font-semibold",
-            rel := "nofollow noopener",
-            target := "_blank",
-            "Paušalko"
-          ),
+          typo.outboundLink("Paušalko", URL("https://pausalko.com")),
           " donosimo vam Internet trgovinu potpuno prilagođenu vašim potrebama."
         )
       ),
