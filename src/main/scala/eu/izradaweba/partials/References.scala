@@ -2,6 +2,7 @@ package eu.izradaweba.partials
 
 import eu.izradaweba.{Route, Reference, Tag}
 import scalatags.Text.all.*
+import java.net.URL
 
 def renderReferences(
     references: List[Reference],
@@ -15,20 +16,28 @@ def renderReferences(
       tag.toString
     )
 
+  /** Opens a modal pop-up with generic text. Incomplete.
+    * This is not used at the moment, but it can be used for something.
+    */
   val seeMoreButton =
     button(
       cls := "border-0 cursor-pointer whitespace-nowrap transition duration-300 mt-4 py-1.5 px-6 rounded-2xl font-normal mt-0 text-sm bg-transparent mr-2 text-button-inactive dark:text-dark-button-inactive border border-solid border-button-inactive dark:border-dark-button-inactive hidden sm:block hover:text-black hover:border-black dark:hover:text-white dark:hover:border-white open-pop-up",
       "Pogledajte"
     )
 
-  def itemHeading(reference: Reference) =
-    val url = reference.url match
-      case Some(url) => url.toString
-      case None      => "#"
+  def externalWebsiteLink(url: URL) =
+    a(
+      cls := "border-0 cursor-pointer whitespace-nowrap transition duration-300 mt-4 py-1.5 px-6 rounded-2xl font-normal mt-0 text-sm bg-transparent mr-2 text-button-inactive dark:text-dark-button-inactive border border-solid border-button-inactive dark:border-dark-button-inactive hidden sm:block hover:text-black hover:border-black dark:hover:text-white dark:hover:border-white",
+      href := url.toString,
+      target := "_blank",
+      rel := "nofollow noopener",
+      "Pogledajte"
+    )
 
+  def itemHeading(reference: Reference) =
     div(
       a(
-        href := url,
+        href := Reference.getUrl(reference).toString,
         rel := "noopener nofollow",
         target := "_blank",
         reference.name
@@ -43,10 +52,10 @@ def renderReferences(
       tag.toString
     )
 
-  val itemActions =
+  def itemActions(url: URL) =
     div(
       cls := "flex items-center justify-end ml-auto w-44",
-      seeMoreButton
+      externalWebsiteLink(url)
     )
 
   div(
@@ -76,7 +85,7 @@ def renderReferences(
           itemHeading(reference)
         ),
         itemTag(reference.tag),
-        itemActions
+        itemActions(Reference.getUrl(reference))
       )
     )
   )

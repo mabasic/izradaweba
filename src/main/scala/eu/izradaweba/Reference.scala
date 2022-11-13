@@ -11,6 +11,12 @@ case class Reference(
     yearMade: Int
 )
 
+object Reference:
+  def getUrl(reference: Reference): URL =
+    reference.url match
+      case Some(url) => url
+      case None      => URL("#")
+
 val references =
   import Tag.*
 

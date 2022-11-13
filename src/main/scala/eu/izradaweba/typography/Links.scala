@@ -25,6 +25,7 @@ def outboundLink(text: String, url: URL, includeRel: Boolean = true) =
     href := url.toString,
     if includeRel then rel := "nofollow noopener"
     else "",
+    target := "_blank",
     text
   )
 
