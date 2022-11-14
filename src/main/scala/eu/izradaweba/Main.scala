@@ -11,7 +11,7 @@ import scalatags.Text.tags2.title
 import org.http4s.server.middleware.Logger
 import org.http4s.server.{Router, Server}
 import org.http4s.server.staticcontent.*
-import eu.izradaweba.pages.{homePage, referencesPage, privacyNoticePage, creditsPage}
+import eu.izradaweba.pages.{homePage, referencesPage, privacyNoticePage, creditsPage, contactPage}
 import org.http4s.Charset.`UTF-8`
 import org.http4s.headers.`Content-Type`
 //import org.http4s.scalatags.*
@@ -28,6 +28,8 @@ object Main extends IOApp {
       Ok(privacyNoticePage.render, `Content-Type`(MediaType.text.html, `UTF-8`))
     case GET -> Route.Credits.url =>
       Ok(creditsPage.render, `Content-Type`(MediaType.text.html, `UTF-8`))
+    case GET -> Route.Contact.url =>
+      Ok(contactPage.render, `Content-Type`(MediaType.text.html, `UTF-8`))
   }
 
   def httpApp: HttpApp[IO] =

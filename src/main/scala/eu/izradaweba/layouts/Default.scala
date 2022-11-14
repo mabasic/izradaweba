@@ -208,7 +208,11 @@ def menu(activeRoute: Route) =
       href = Route.References.url.toString,
       isActive = activeRoute == Route.References
     ),
-    menuItem(Route.Contact.name)
+    menuItem(
+      Route.Contact.name,
+      href = Route.Contact.url.toString,
+      isActive = activeRoute == Route.Contact
+    )
   )
 
 val dot =
@@ -363,8 +367,15 @@ def defaultLayout(
         ),
         link(href := "/assets/css/index.css", rel := "stylesheet"),
         Config.analyticsEnabled match
-          case true => script(src := "https://plausible.laravelista.com/js/plausible.js", async, defer, attr("data-domain") := "izradaweba.eu")
-          case _ => "",
+          case true =>
+            script(
+              src := "https://plausible.laravelista.com/js/plausible.js",
+              async,
+              defer,
+              attr("data-domain") := "izradaweba.eu"
+            )
+          case _ => ""
+        ,
         script(src := "/assets/js/main.js"),
         bgMode match
           case GenerativeBigSurWavesJS =>
