@@ -43,7 +43,7 @@ val summary5 =
   Seq(
     b(
       "Feel free to send a PR which translates the text above to Croatian language ",
-      span(cls := "text-red-600", "♥"),
+      span(cls := "text-red-500", "♥"),
       "."
     )
   )

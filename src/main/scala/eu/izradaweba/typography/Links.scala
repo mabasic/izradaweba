@@ -31,7 +31,7 @@ def outboundLink(text: String, url: URL, includeRel: Boolean = true) =
 
 def link(text: String, path: Path) =
   a(
-    cls := "underline hover:no-underline mr-2",
+    cls := "underline hover:no-underline",
     href := path.toString,
     text
   )

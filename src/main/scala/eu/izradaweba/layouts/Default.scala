@@ -162,6 +162,7 @@ val logo =
     cls := "w-52 shrink-0",
     a(
       href := Route.Home.url.toString,
+      aria.label := "Go to home page",
       raw(svgs.logo)
     )
   )
@@ -222,6 +223,8 @@ val dot =
 
 val mobileNavbarToggle =
   button(
+    `type` := "button",
+    aria.label := "Toggle navbar",
     id := "mobile-navbar-toggle",
     cls := "md:hidden flex py-3.5 px-2.5 rounded-lg group hover:bg-hover-menu-bg dark:hover:bg-dark-hover-menu-bg focus:bg-hover-menu-bg dark:focus:bg-dark-hover-menu-bg",
     dot,
@@ -286,7 +289,7 @@ val footer =
     div(
       cls := "text-xs mt-2 lg:mt-0 flex items-center justify-between",
       div(
-        cls := "mr-2",
+        cls := "mr-2 flex gap-2",
         typo.routeLink(Route.PrivacyNotice),
         typo.routeLink(Route.Credits),
         typo.outboundLink(
@@ -296,8 +299,10 @@ val footer =
         )
       ),
       button(
+        `type` := "button",
         id := "theme-switch",
         cls := "p-2 rounded-full flex focus-visible:outline-none",
+        aria.label := "Switch theme",
         svg(
           id := "theme-dark",
           fill := "currentColor",
