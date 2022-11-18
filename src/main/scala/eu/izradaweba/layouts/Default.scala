@@ -264,7 +264,12 @@ def mobileNavbar(activeRoute: Route) =
           href = Route.References.url.toString,
           isActive = activeRoute == Route.References
         ),
-        menuItem(Route.Contact.name, isMobile = true)
+        menuItem(
+          Route.Contact.name,
+          isMobile = true,
+          href = Route.Contact.url.toString,
+          isActive = activeRoute == Route.Contact
+        )
       )
     )
   )

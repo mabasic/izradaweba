@@ -87,7 +87,7 @@ val contactPageContent = Seq(
             id := "subject",
             name := "subject",
             cls := "bg-white/30 dark:bg-black/20 text-black dark:text-white rounded-xl w-full block p-2",
-            option(value := "", "Odaberite predmet poruke"),
+            option(value := "", "Odaberite predmet poruke", disabled, selected, hidden),
             for subject <- subjects
             yield option(
               value := subject.id,
