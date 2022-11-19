@@ -23,20 +23,13 @@ import eu.izradaweba.pages.{
   referencesPage,
   privacyNoticePage,
   creditsPage,
-  contactPage
+  contactPage,
+  contactMessageValidationRules,
+  messageReceivedPage
 }
+import eu.izradaweba.validation.{validate, ValidationStatus}
 import org.http4s.Charset.`UTF-8`
 import org.http4s.headers.`Content-Type`
-
-type Email = String
-
-case class ContactMessage(
-    full_name: String,
-    email_address: Email,
-    subject: eu.izradaweba.Tag,
-    message: String,
-    gdpr_consent: Boolean
-)
 
 /** When the http4s-scalatags package gets a new release with my PR merged then
   * this helper function can be replaced with:
@@ -55,6 +48,13 @@ def Ok(output: doctype) =
   org.http4s.dsl.io
     .Ok(output.render, `Content-Type`(MediaType.text.html, `UTF-8`))
 
+def UnprocessableEntity(output: doctype) =
+  org.http4s.dsl.io
+    .UnprocessableEntity(
+      output.render,
+      `Content-Type`(MediaType.text.html, `UTF-8`)
+    )
+
 object Main extends IOApp {
 
   def routeService: HttpRoutes[IO] = HttpRoutes.of[IO] {
@@ -67,37 +67,19 @@ object Main extends IOApp {
     case GET -> Route.Credits.url =>
       Ok(creditsPage)
     case GET -> Route.Contact.url =>
-      Ok(contactPage)
+      Ok(contactPage())
     case req @ POST -> Route.Contact.url =>
       req.decode[IO, UrlForm] { data =>
-        // import eu.izradaweba.Tag
+        val validationStatus = validate(contactMessageValidationRules, data)
 
-        // data.values.map
+        validationStatus match
+          // If validation passes send email, display success message.
+          case ValidationStatus(true, data, _) =>
+            Ok(messageReceivedPage)
 
-        // val test2 = ContactMessageDTO(
-        //   full_name = data.getFirst("full_name"),
-        //   email_address = data.getFirst("email_address"),
-        //   subject = Tag.from(data.getFirst("subject") match
-        //     case Some(value) => value
-        //     case None        => ""
-        //   ),
-        //   message = data.getFirst("message"),
-        //   gdpr_consent = data.getFirst("gdpr_consent") match
-        //     case Some(value) => Some(value == "on")
-        //     case None        => None
-        // )
-
-        // val test = data.getFirst("email_address") match
-        //   case Some(value) => value
-        //   case None        => ""
-
-        // Validation
-
-        // If validation passes send email, display success message.
-        // If validation fails, display validation error in form.
-        UnprocessableEntity("Something went wrong!")
-
-        // Ok(data.toString)
+          // If validation fails, display validation errors in form
+          case ValidationStatus(false, _, errors) =>
+            UnprocessableEntity(contactPage(data, errors))
       }
   }
 
