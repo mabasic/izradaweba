@@ -22,3 +22,7 @@ enum Tag(val tag: String):
 
   override def toString: String =
     s"#$tag"
+
+object Tag:
+  def from(value: String) =
+    this.values.find(_.tag == value)

@@ -9,7 +9,7 @@ val http4sVersion = "1.0.0-M35"
 lazy val root = (project in file("."))
   .settings(
     name := "Website",
-    // Note: Fix for sbt run, not unbinding port on exit. 
+    // Note: Fix for sbt run, not unbinding port on exit.
     run / fork := true,
     libraryDependencies += "org.http4s" %% "http4s-dsl" % http4sVersion,
     libraryDependencies += "org.http4s" %% "http4s-ember-server" % http4sVersion,
