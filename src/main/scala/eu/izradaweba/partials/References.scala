@@ -48,7 +48,7 @@ def renderReferences(
 
   def itemTag(tag: Tag) =
     div(
-      cls := "ml-auto w-32 relative font-normal hidden md:inline text-sm",
+      cls := "ml-auto w-32 relative font-normal hidden lg:inline text-sm",
       tag.toString
     )
 
@@ -65,7 +65,7 @@ def renderReferences(
       headingTag(heading),
       if isFeatured then
         div(
-          cls := "hidden sm:block self-center",
+          cls := "self-center", // hidden sm:block
           a(
             cls := "text-xs hover:text-black dark:hover:text-white",
             href := Route.References.url.toString,

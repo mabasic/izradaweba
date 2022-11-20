@@ -63,6 +63,21 @@ def old(fieldName: String, oldData: UrlForm): Modifier =
     value := oldData.getFirstOrElse(fieldName, "")
   else ""
 
+def getSubject(
+    oldData: UrlForm,
+    subjectId: String,
+    querySubject: Option[eu.izradaweba.Tag]
+): Modifier =
+  querySubject match
+    case None =>
+      if oldData.values.contains("subject") && subjectId == oldData
+          .getFirstOrElse("subject", "")
+      then selected := true
+      else ""
+    case Some(tag) =>
+      if subjectId == tag.tag then selected := true
+      else ""
+
 val messageReceivedPageContent = Seq(
   typo.page(
     Seq(
@@ -75,7 +90,11 @@ val messageReceivedPageContent = Seq(
   )
 )
 
-def contactPageContent(oldData: UrlForm, errors: ValidationErrors) = Seq(
+def contactPageContent(
+    oldData: UrlForm,
+    errors: ValidationErrors,
+    querySubject: Option[eu.izradaweba.Tag]
+) = Seq(
   typo.page(
     Seq(
       typo.pageTitle("Kontaktiranje nas"),
@@ -151,10 +170,7 @@ def contactPageContent(oldData: UrlForm, errors: ValidationErrors) = Seq(
             yield option(
               value := subject.id,
               subject.text,
-              if oldData.values.contains("subject") && subject.id == oldData
-                  .getFirstOrElse("subject", "")
-              then selected := true
-              else ""
+              getSubject(oldData, subject.id, querySubject)
             )
           ),
           displayError("subject", errors)
@@ -208,10 +224,11 @@ def contactPageContent(oldData: UrlForm, errors: ValidationErrors) = Seq(
 
 def contactPage(
     oldData: UrlForm = UrlForm(),
-    errors: ValidationErrors = Map()
+    errors: ValidationErrors = Map(),
+    querySubject: Option[eu.izradaweba.Tag] = None
 ) =
   defaultLayout(
-    contactPageContent(oldData, errors),
+    contactPageContent(oldData, errors, querySubject),
     activeRoute = Route.Contact,
     metaTitle = "Kontakt"
   )

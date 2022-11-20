@@ -39,8 +39,9 @@ val heroSection =
         ),
         "."
       ),
-      button(
-        cls := "bg-content-button-color dark:bg-dark-content-button-color border-0 text-[#ffffff] cursor-pointer transition duration-300 whitespace-nowrap mt-4 rounded-2xl py-2 px-6 hover:bg-content-button-hover-color dark:hover:bg-dark-content-button-hover-color",
+      a(
+        href := Route.Contact.url.toString + s"?subject=${Tag.WebStandard.tag}",
+        cls := "inline-block bg-content-button-color dark:bg-dark-content-button-color border-0 text-[#ffffff] cursor-pointer transition duration-300 whitespace-nowrap mt-4 rounded-2xl py-2 px-6 hover:bg-content-button-hover-color dark:hover:bg-dark-content-button-hover-color",
         "Pošaljite upit"
       )
     ),
@@ -130,8 +131,9 @@ val products =
   )
 
 def itemSection(title: String, items: List[Item]) =
-  val serviceButton =
-    button(
+  def ctaButton(tag: Tag) =
+    a(
+      href := Route.Contact.url.toString + s"?subject=${tag.tag}",
       cls := "bg-content-button-color dark:bg-dark-content-button-color border-0 text-[#ffffff] cursor-pointer whitespace-nowrap transition duration-300 mt-4 py-1.5 px-6 rounded-2xl font-normal mt-0 text-sm hover:bg-content-button-hover-color dark:hover:bg-dark-content-button-hover-color",
       "Pošaljite upit"
     )
@@ -169,7 +171,7 @@ def itemSection(title: String, items: List[Item]) =
         ),
         div(
           cls := "flex items-center justify-end ml-auto mt-4",
-          serviceButton
+          ctaButton(item.tag)
         )
       )
     )

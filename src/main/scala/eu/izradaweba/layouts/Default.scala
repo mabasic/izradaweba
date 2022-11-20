@@ -296,7 +296,7 @@ val footer =
       div(
         cls := "mr-2 flex gap-2",
         typo.routeLink(Route.PrivacyNotice),
-        typo.routeLink(Route.Credits),
+        // typo.routeLink(Route.Credits),
         typo.outboundLink(
           "Izvorni kod",
           URL("https://github.com/mabasic/izradaweba"),

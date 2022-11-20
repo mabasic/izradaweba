@@ -12,9 +12,9 @@ import org.http4s.{
 }
 import org.http4s.dsl.io.*
 import org.http4s.ember.server.*
-import scalatags.text.Builder
-import scalatags.Text.all.*
-import scalatags.Text.tags2.title
+// import scalatags.text.Builder
+import scalatags.Text.all.doctype
+// import scalatags.Text.tags2.title
 import org.http4s.server.middleware.Logger
 import org.http4s.server.{Router, Server}
 import org.http4s.server.staticcontent.*
@@ -30,6 +30,9 @@ import eu.izradaweba.pages.{
 import eu.izradaweba.validation.{validate, ValidationStatus}
 import org.http4s.Charset.`UTF-8`
 import org.http4s.headers.`Content-Type`
+import org.http4s.QueryParamDecoder
+import org.http4s.dsl.impl.OptionalQueryParamDecoderMatcher
+import org.http4s.dsl.impl.QueryParamDecoderMatcher
 
 /** When the http4s-scalatags package gets a new release with my PR merged then
   * this helper function can be replaced with:
@@ -55,6 +58,13 @@ def UnprocessableEntity(output: doctype) =
       `Content-Type`(MediaType.text.html, `UTF-8`)
     )
 
+// Note: What does it mean "implicit"?
+implicit val subjectQueryParamDecoder: QueryParamDecoder[Option[Tag]] =
+    QueryParamDecoder[String].map(Tag.from)
+
+object OptionalSubjectQueryParamMatcher
+  extends OptionalQueryParamDecoderMatcher[Option[Tag]]("subject")
+
 object Main extends IOApp {
 
   def routeService: HttpRoutes[IO] = HttpRoutes.of[IO] {
@@ -64,10 +74,12 @@ object Main extends IOApp {
       Ok(referencesPage)
     case GET -> Route.PrivacyNotice.url =>
       Ok(privacyNoticePage)
-    case GET -> Route.Credits.url =>
-      Ok(creditsPage)
-    case GET -> Route.Contact.url =>
-      Ok(contactPage())
+    // case GET -> Route.Credits.url =>
+    //   Ok(creditsPage)
+    case GET -> Route.Contact.url :? OptionalSubjectQueryParamMatcher(maybeMaybeSubject) =>
+      maybeMaybeSubject match
+        case None => Ok(contactPage())
+        case Some(maybeSubject) => Ok(contactPage(querySubject = maybeSubject))
     case req @ POST -> Route.Contact.url =>
       req.decode[IO, UrlForm] { data =>
         val validationStatus = validate(contactMessageValidationRules, data)
