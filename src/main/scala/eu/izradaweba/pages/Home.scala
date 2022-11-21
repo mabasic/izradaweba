@@ -46,6 +46,8 @@ val heroSection =
       )
     ),
     img(
+      attr("width") := 300,
+      attr("height") := 229,
       cls := "mb-4 md:mb-0 w-[300px]",
       src := "/assets/img/web-icon.svg",
       alt := "3D illustration of a website layout"
@@ -200,5 +202,8 @@ val home = Seq(
 def homePage = defaultLayout(
   home,
   activeRoute = Route.Home,
-  metaTitle = "Izrada web stranica"
+  metaTitle = "Izrada web stranica",
+  metaDescription = Some(
+    "Web stranice prilagođene svim uređajima, optimizirane za tražilice, sa Lighthouse rezultatom u prosjeku preko 90/100, po početnoj cijeni od 299,99€."
+  )
 )
