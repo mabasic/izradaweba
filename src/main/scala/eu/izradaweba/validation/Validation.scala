@@ -14,7 +14,6 @@ case class NoConsent(message: String) extends Exception(message)
 case class Unknown(message: String) extends Exception(message)
 
 type ValidationRule = (Option[String], String) => Try[Boolean]
-
 type ValidationRules = Map[String, List[ValidationRule]]
 
 type ValidationResults = Map[String, List[Try[Boolean]]]
@@ -85,11 +84,22 @@ case class ValidationStatus(
     errors: ValidationErrors
 )
 
-def validate(rules: ValidationRules, data: UrlForm): ValidationStatus =
+def validate(
+    rules: ValidationRules,
+    data: UrlForm,
+    fieldNames: Map[String, String] = Map()
+): ValidationStatus =
   val results = rules.map((key, rules) =>
     val value = data.getFirst(key)
 
-    (key, for rule <- rules yield rule(value, key))
+    val fieldName =
+      if fieldNames.contains(key) then fieldNames(key)
+      else key
+
+    (
+      key,
+      for rule <- rules yield rule(value, fieldName)
+    )
   )
 
   val validatedData: ValidatedData = results

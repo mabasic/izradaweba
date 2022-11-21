@@ -25,7 +25,8 @@ import eu.izradaweba.pages.{
   creditsPage,
   contactPage,
   contactMessageValidationRules,
-  messageReceivedPage
+  messageReceivedPage,
+  contactFieldNames
 }
 import eu.izradaweba.validation.{validate, ValidationStatus}
 import org.http4s.Charset.`UTF-8`
@@ -82,7 +83,7 @@ object Main extends IOApp {
         case Some(maybeSubject) => Ok(contactPage(querySubject = maybeSubject))
     case req @ POST -> Route.Contact.url =>
       req.decode[IO, UrlForm] { data =>
-        val validationStatus = validate(contactMessageValidationRules, data)
+        val validationStatus = validate(contactMessageValidationRules, data, contactFieldNames)
 
         validationStatus match
           // If validation passes send email, display success message.

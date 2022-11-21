@@ -39,6 +39,14 @@ val contactMessageValidationRules: ValidationRules = Map(
   "gdpr_consent" -> List(validateConsent)
 )
 
+val contactFieldNames = Map(
+  "full_name" -> "Ime i prezime",
+  "email_address" -> "Email adresa",
+  "subject" -> "Predmet",
+  "message" -> "Poruka",
+  "gdpr_consent" -> "Privola"
+)
+
 def itemToSubject(item: Item) =
   Subject(text = item.name, id = item.tag.tag)
 

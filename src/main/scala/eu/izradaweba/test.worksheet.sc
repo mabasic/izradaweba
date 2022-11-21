@@ -20,3 +20,10 @@ val productSubjects = products.map(itemToSubject)  /*>  : List[Subject] = List(S
 val serviceSubjects = services.map(itemToSubject)  /*>  : List[Subject] = List(Subject(web-standard,Web stranice), Subject(cust…  */
 
 val subjects = productSubjects ++ serviceSubjects  /*>  : List[Subject] = List(Subject(web-shop,Internet trgovina), Subject(boo…  */
+
+def add(x: Int, y: Int) = x + y
+def add(x: Float, y: Float) = x + y
+
+def addOne = add(_, 2)
+
+addOne(3)  /*>  : Int = 5  */
