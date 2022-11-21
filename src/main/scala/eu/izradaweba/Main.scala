@@ -61,10 +61,10 @@ def UnprocessableEntity(output: doctype) =
 
 // Note: What does it mean "implicit"?
 implicit val subjectQueryParamDecoder: QueryParamDecoder[Option[Tag]] =
-    QueryParamDecoder[String].map(Tag.from)
+  QueryParamDecoder[String].map(Tag.from)
 
 object OptionalSubjectQueryParamMatcher
-  extends OptionalQueryParamDecoderMatcher[Option[Tag]]("subject")
+    extends OptionalQueryParamDecoderMatcher[Option[Tag]]("subject")
 
 object Main extends IOApp {
 
@@ -77,13 +77,16 @@ object Main extends IOApp {
       Ok(privacyNoticePage)
     // case GET -> Route.Credits.url =>
     //   Ok(creditsPage)
-    case GET -> Route.Contact.url :? OptionalSubjectQueryParamMatcher(maybeMaybeSubject) =>
+    case GET -> Route.Contact.url :? OptionalSubjectQueryParamMatcher(
+          maybeMaybeSubject
+        ) =>
       maybeMaybeSubject match
-        case None => Ok(contactPage())
+        case None               => Ok(contactPage())
         case Some(maybeSubject) => Ok(contactPage(querySubject = maybeSubject))
     case req @ POST -> Route.Contact.url =>
       req.decode[IO, UrlForm] { data =>
-        val validationStatus = validate(contactMessageValidationRules, data, contactFieldNames)
+        val validationStatus =
+          validate(contactMessageValidationRules, data, contactFieldNames)
 
         validationStatus match
           // If validation passes send email, display success message.

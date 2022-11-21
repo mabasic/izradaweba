@@ -30,7 +30,6 @@ def pageParagraph(elements: String | Seq[Modifier]) =
   p(
     cls := "my-3",
     elements match
-      case text: String => text
+      case text: String            => text
       case elements: Seq[Modifier] => for element <- elements yield element
   )
-

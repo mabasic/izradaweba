@@ -16,8 +16,8 @@ def renderReferences(
       tag.toString
     )
 
-  /** Opens a modal pop-up with generic text. Incomplete.
-    * This is not used at the moment, but it can be used for something.
+  /** Opens a modal pop-up with generic text. Incomplete. This is not used at
+    * the moment, but it can be used for something.
     */
   val seeMoreButton =
     button(
