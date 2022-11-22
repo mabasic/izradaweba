@@ -60,3 +60,9 @@ npm run watch
 # production
 npm run prod
 ```
+
+## AWS SES
+
+In the code there are two versions: v1 and v2.
+I would have only created a v2 version, but I have by mistake first created a mailer using v1 version of AWS SDK.
+Only later have I realized that there is a v2 of the SDK and how to use it.

@@ -9,3 +9,4 @@ node_modules/
 null/
 metals.sbt
 *.semanticdb
+.env

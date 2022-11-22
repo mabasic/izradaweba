@@ -373,8 +373,10 @@ def defaultLayout(
         title(metaTitle + " | IzradaWeba"),
         meta(charset := "UTF-8"),
         metaDescription match
-          case Some(description) => meta(name := "description", content := description)
-          case None => (),
+          case Some(description) =>
+            meta(name := "description", content := description)
+          case None => ()
+        ,
         meta(
           name := "viewport",
           content := "width=device-width, initial-scale=1.0"

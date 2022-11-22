@@ -5,6 +5,7 @@ ThisBuild / organization := "eu.izradaweba"
 ThisBuild / scalacOptions ++= Seq("-deprecation")
 
 val http4sVersion = "1.0.0-M35"
+val awsSdkVersion = "2.18.22"
 
 lazy val root = (project in file("."))
   .settings(
@@ -16,7 +17,11 @@ lazy val root = (project in file("."))
     libraryDependencies += "org.http4s" %% "http4s-scalatags" % http4sVersion,
     libraryDependencies += "com.lihaoyi" %% "scalatags" % "0.12.0",
     libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.4.1",
-    libraryDependencies += "org.http4s" %% "http4s-scalatags" % http4sVersion
+    libraryDependencies += "org.http4s" %% "http4s-scalatags" % http4sVersion,
+    libraryDependencies += "com.amazonaws" % "aws-java-sdk-core" % "1.12.346",
+    libraryDependencies += "com.amazonaws" % "aws-java-sdk-sesv2" % "1.12.346",
+    libraryDependencies += "software.amazon.awssdk" % "bom" % awsSdkVersion,
+    libraryDependencies += "software.amazon.awssdk" % "sesv2" % awsSdkVersion
   )
 
 lazy val js = (project in file("js"))

@@ -34,6 +34,7 @@ import org.http4s.headers.`Content-Type`
 import org.http4s.QueryParamDecoder
 import org.http4s.dsl.impl.OptionalQueryParamDecoderMatcher
 import org.http4s.dsl.impl.QueryParamDecoderMatcher
+import eu.izradaweba.mail.aws.v2.sendContactMessage
 
 /** When the http4s-scalatags package gets a new release with my PR merged then
   * this helper function can be replaced with:
@@ -91,6 +92,16 @@ object Main extends IOApp {
         validationStatus match
           // If validation passes send email, display success message.
           case ValidationStatus(true, data, _) =>
+            // val contactMessage = ContactMessage(
+            //   full_name = data.getOrElse,
+            //   email_address = "test@example.com",
+            //   subject = eu.izradaweba.Tag.WebStandard,
+            //   message = "Ovo je test poruka.",
+            //   gdpr_consent = true
+            // )
+
+            // sendContactMessage()
+
             Ok(messageReceivedPage)
 
           // If validation fails, display validation errors in form
