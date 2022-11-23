@@ -27,7 +27,7 @@ class ResourceServiceBuilder[F[_]] private (
     bufferSize: Int,
     cacheStrategy: CacheStrategy[F],
     preferGzipped: Boolean,
-    classLoader: Option[ClassLoader],
+    classLoader: Option[ClassLoader]
 ) {
   private[this] val logger = getLogger
 
@@ -37,7 +37,7 @@ class ResourceServiceBuilder[F[_]] private (
       bufferSize: Int = bufferSize,
       cacheStrategy: CacheStrategy[F] = cacheStrategy,
       preferGzipped: Boolean = preferGzipped,
-      classLoader: Option[ClassLoader] = classLoader,
+      classLoader: Option[ClassLoader] = classLoader
   ): ResourceServiceBuilder[F] =
     new ResourceServiceBuilder[F](
       basePath,
@@ -45,23 +45,29 @@ class ResourceServiceBuilder[F[_]] private (
       bufferSize,
       cacheStrategy,
       preferGzipped,
-      classLoader,
+      classLoader
     )
 
-  def withBasePath(basePath: String): ResourceServiceBuilder[F] = copy(basePath = basePath)
+  def withBasePath(basePath: String): ResourceServiceBuilder[F] =
+    copy(basePath = basePath)
   def withPathPrefix(pathPrefix: String): ResourceServiceBuilder[F] =
     copy(pathPrefix = pathPrefix)
 
-  def withCacheStrategy(cacheStrategy: CacheStrategy[F]): ResourceServiceBuilder[F] =
+  def withCacheStrategy(
+      cacheStrategy: CacheStrategy[F]
+  ): ResourceServiceBuilder[F] =
     copy(cacheStrategy = cacheStrategy)
 
   def withPreferGzipped(preferGzipped: Boolean): ResourceServiceBuilder[F] =
     copy(preferGzipped = preferGzipped)
 
-  def withClassLoader(classLoader: Option[ClassLoader]): ResourceServiceBuilder[F] =
+  def withClassLoader(
+      classLoader: Option[ClassLoader]
+  ): ResourceServiceBuilder[F] =
     copy(classLoader = classLoader)
 
-  def withBufferSize(bufferSize: Int): ResourceServiceBuilder[F] = copy(bufferSize = bufferSize)
+  def withBufferSize(bufferSize: Int): ResourceServiceBuilder[F] =
+    copy(bufferSize = bufferSize)
 
   def toRoutes(implicit F: Async[F]): HttpRoutes[F] = {
     val basePath = if (this.basePath.isEmpty) "/" else this.basePath
@@ -71,7 +77,8 @@ class ResourceServiceBuilder[F[_]] private (
       case Success(rootPath) =>
         TranslateUri(pathPrefix)(Kleisli {
           case request if request.pathInfo.nonEmpty =>
-            val segments = request.pathInfo.segments.map(_.decoded(plusIsSpace = true))
+            val segments =
+              request.pathInfo.segments.map(_.decoded(plusIsSpace = true))
             OptionT
               .liftF(F.catchNonFatal {
                 segments.foldLeft(rootPath) {
@@ -90,7 +97,7 @@ class ResourceServiceBuilder[F[_]] private (
                   path.toString.replaceAll("\\\\", "/"),
                   Some(request),
                   preferGzipped = preferGzipped,
-                  classLoader,
+                  classLoader
                 )
               }
               .semiflatMap(cacheStrategy.cache(request.pathInfo, _))
@@ -117,7 +124,7 @@ object ResourceServiceBuilder {
       bufferSize = 50 * 1024,
       cacheStrategy = NoopCacheStrategy[F],
       preferGzipped = false,
-      classLoader = None,
+      classLoader = None
     )
 }
 

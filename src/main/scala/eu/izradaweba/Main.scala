@@ -12,9 +12,6 @@ import org.http4s.{
 }
 import org.http4s.dsl.io.*
 import org.http4s.ember.server.*
-// import scalatags.text.Builder
-import scalatags.Text.all.doctype
-// import scalatags.Text.tags2.title
 import org.http4s.server.middleware.Logger
 import org.http4s.server.{Router, Server}
 // import org.http4s.server.staticcontent.*
@@ -34,32 +31,11 @@ import org.http4s.headers.`Content-Type`
 import org.http4s.QueryParamDecoder
 import org.http4s.dsl.impl.OptionalQueryParamDecoderMatcher
 import org.http4s.dsl.impl.QueryParamDecoderMatcher
+
 // import eu.izradaweba.mail.aws.v2.sendContactMessage
 import eu.izradaweba.temp.resourceServiceBuilder
 
-/** When the http4s-scalatags package gets a new release with my PR merged then
-  * this helper function can be replaced with:
-  *
-  * ```
-  * import org.http4s.scalatags.*
-  * Ok(homePage)
-  * ```
-  *
-  * @param output
-  *   HTML doctype
-  * @return
-  *   It returns a response from scalatags.
-  */
-def Ok(output: doctype) =
-  org.http4s.dsl.io
-    .Ok(output.render, `Content-Type`(MediaType.text.html, `UTF-8`))
-
-def UnprocessableEntity(output: doctype) =
-  org.http4s.dsl.io
-    .UnprocessableEntity(
-      output.render,
-      `Content-Type`(MediaType.text.html, `UTF-8`)
-    )
+import org.http4s.scalatags.*
 
 // Note: What does it mean "implicit"?
 implicit val subjectQueryParamDecoder: QueryParamDecoder[Option[Tag]] =
@@ -86,7 +62,7 @@ object Main extends IOApp {
         case None               => Ok(contactPage())
         case Some(maybeSubject) => Ok(contactPage(querySubject = maybeSubject))
     case req @ POST -> Route.Contact.url =>
-      req.decode[IO, UrlForm] { data =>
+      req.decode[UrlForm] { data =>
         val validationStatus =
           validate(contactMessageValidationRules, data, contactFieldNames)
 
@@ -114,8 +90,7 @@ object Main extends IOApp {
   def httpApp: HttpApp[IO] =
     Router(
       "/" -> routeService,
-      "/assets" -> resourceServiceBuilder[IO]("").toRoutes,
-      // "/assets" -> fileService(FileService.Config("./src/main/resources/"))
+      "/assets" -> resourceServiceBuilder[IO]("").toRoutes
     ).orNotFound
 
   def finalHttpApp: HttpApp[IO] = Logger.httpApp(true, true)(httpApp)

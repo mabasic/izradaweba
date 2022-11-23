@@ -70,7 +70,7 @@
 //   val body = s"""Ime i prezime: ${message.full_name}
 //                 |Email: ${message.email_address}
 //                 |Predmet: ${subject}
-//                 |Poruka: 
+//                 |Poruka:
 //                 |
 //                 |${message.message}
 //                 |
