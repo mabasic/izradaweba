@@ -66,3 +66,12 @@ npm run prod
 In the code there are two versions: v1 and v2.
 I would have only created a v2 version, but I have by mistake first created a mailer using v1 version of AWS SDK.
 Only later have I realized that there is a v2 of the SDK and how to use it.
+
+## Troubleshooting
+
+Inspect files in a jar:
+
+```
+jar tf .\target\universal\website-0.1.0-SNAPSHOT\lib\eu.izradaweba.website-0.1.0-SNAPSHOT.jar
+```
+

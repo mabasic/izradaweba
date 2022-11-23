@@ -34,7 +34,7 @@ import org.http4s.headers.`Content-Type`
 import org.http4s.QueryParamDecoder
 import org.http4s.dsl.impl.OptionalQueryParamDecoderMatcher
 import org.http4s.dsl.impl.QueryParamDecoderMatcher
-import eu.izradaweba.mail.aws.v2.sendContactMessage
+// import eu.izradaweba.mail.aws.v2.sendContactMessage
 
 /** When the http4s-scalatags package gets a new release with my PR merged then
   * this helper function can be replaced with:
@@ -113,7 +113,8 @@ object Main extends IOApp {
   def httpApp: HttpApp[IO] =
     Router(
       "/" -> routeService,
-      "/assets" -> fileService(FileService.Config("./src/main/resources/"))
+      "/assets" -> resourceServiceBuilder[IO]("").toRoutes,
+      // "/assets" -> fileService(FileService.Config("./src/main/resources/"))
     ).orNotFound
 
   def finalHttpApp: HttpApp[IO] = Logger.httpApp(true, true)(httpApp)

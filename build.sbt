@@ -10,6 +10,9 @@ val awsSdkVersion = "2.18.22"
 lazy val root = (project in file("."))
   .settings(
     name := "Website",
+    maintainer := "mario@laravelista.hr",
+    dockerExposedPorts := Seq(8080),
+    dockerBaseImage := "eclipse-temurin:18",
     // Note: Fix for sbt run, not unbinding port on exit.
     run / fork := true,
     libraryDependencies += "org.http4s" %% "http4s-dsl" % http4sVersion,
@@ -23,6 +26,9 @@ lazy val root = (project in file("."))
     libraryDependencies += "software.amazon.awssdk" % "bom" % awsSdkVersion,
     libraryDependencies += "software.amazon.awssdk" % "sesv2" % awsSdkVersion
   )
+  .enablePlugins(UniversalPlugin)
+  .enablePlugins(JavaAppPackaging)
+  .enablePlugins(DockerPlugin)
 
 lazy val js = (project in file("js"))
   .settings(
