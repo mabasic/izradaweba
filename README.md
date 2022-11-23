@@ -120,3 +120,13 @@ We have tried adding this dependency but it still did not work:
 
 > add "org.typelevel" %% "cats-effect" % "3.4.1" as a dependency
 
+
+### Cyclic reference involving object Content
+
+```
+exception caught when loading trait Builder: Cyclic reference involving object Content
+exception caught when loading module class Content$: Cyclic reference involving object Content
+```
+
+Related issue: https://github.com/lampepfl/dotty/issues/15288
+
