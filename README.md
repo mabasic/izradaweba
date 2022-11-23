@@ -47,10 +47,24 @@ sbtn reStatus
 For docker image:
 
 ```
+# Build and publish to local docker
 sbt Docker/publishLocal
 
+# Run local
 docker run -p 80:8080 --env-file .env --restart unless-stopped -d  website:0.1.0-SNAPSHOT
+
+# Build and publish to remote docker repository
+sbt Docker/publish
+
+# Run on production
+docker run -p 8080:8080 --env-file .env --restart unless-stopped -d --name izradaweba  ghcr.io/mabasic/izradaweba/website:0.1.0-SNAPSHOT
 ```
+
+When deploying to production:
+
+1. Login to github container repository
+2. Copy .env.example and modify values
+3. Run the above command from the directory where `.env` is located in
 
 For zip file:
 
