@@ -387,7 +387,7 @@ def defaultLayout(
         ),
         link(href := "https://izradaweba.eu", rel := "canonical"),
         link(href := "/assets/css/index.css", rel := "stylesheet"),
-        link(href := "/favicon.ico", rel := "icon"),
+        link(href := "/assets/img/favicon.ico", rel := "icon"),
         link(href := "/assets/img/favicon.png", rel := "shortcut icon"),
         link(href := "/assets/img/apple-touch-icon.png", rel := "apple-touch-icon"),
         link(href := "/assets/img/apple-touch-icon-72x72.png", rel := "apple-touch-icon", attr("sizes") := "72x72"),
