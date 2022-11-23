@@ -69,9 +69,35 @@ Only later have I realized that there is a v2 of the SDK and how to use it.
 
 ## Troubleshooting
 
-Inspect files in a jar:
+
+### Inspect files in a jar:
 
 ```
 jar tf .\target\universal\website-0.1.0-SNAPSHOT\lib\eu.izradaweba.website-0.1.0-SNAPSHOT.jar
 ```
+
+
+### No DRI found for query: ExitCode
+
+According to @armanbilge this is a scala 3 related bug: 
+
+```
+sbt:Website> dist
+[info] Wrote C:\Users\mario\code\src\github.com\mabasic\izradaweba\target\scala-3.2.0\website_3-0.1.0-SNAPSHOT.pom
+[info] Main Scala API documentation to C:\Users\mario\code\src\github.com\mabasic\izradaweba\target\scala-3.2.0\api...
+[info] Skipping unused scalacOptions: -Xsemanticdb, -semanticdb-target
+[warn] -- Warning: src\main\scala\eu\izradaweba\Main.scala:121:6 ----------------------
+[warn] 121 |  def run(args: List[String]): IO[ExitCode] =
+[warn]     |      ^le / doc 0s
+[warn]     |      No DRI found for query: ExitCode
+[warn] one warning found
+[info] Main Scala API documentation successful.
+[success] All package validations passed
+[info] Your package is ready in C:\Users\mario\code\src\github.com\mabasic\izradaweba\target\universal\website-0.1.0-SNAPSHOT.zip
+[success] Total time: 6 s, completed 22. stu 2022. 20:51:10
+```
+
+We have tried adding this dependency but it still did not work:
+
+> add "org.typelevel" %% "cats-effect" % "3.4.1" as a dependency
 
