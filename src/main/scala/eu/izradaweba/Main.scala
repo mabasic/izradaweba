@@ -17,7 +17,7 @@ import scalatags.Text.all.doctype
 // import scalatags.Text.tags2.title
 import org.http4s.server.middleware.Logger
 import org.http4s.server.{Router, Server}
-import org.http4s.server.staticcontent.*
+// import org.http4s.server.staticcontent.*
 import eu.izradaweba.pages.{
   homePage,
   referencesPage,
@@ -35,6 +35,7 @@ import org.http4s.QueryParamDecoder
 import org.http4s.dsl.impl.OptionalQueryParamDecoderMatcher
 import org.http4s.dsl.impl.QueryParamDecoderMatcher
 // import eu.izradaweba.mail.aws.v2.sendContactMessage
+import eu.izradaweba.temp.resourceServiceBuilder
 
 /** When the http4s-scalatags package gets a new release with my PR merged then
   * this helper function can be replaced with:
