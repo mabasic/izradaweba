@@ -32,7 +32,7 @@ import org.http4s.QueryParamDecoder
 import org.http4s.dsl.impl.OptionalQueryParamDecoderMatcher
 import org.http4s.dsl.impl.QueryParamDecoderMatcher
 
-import eu.izradaweba.mail.aws.v1.sendContactMessage
+import eu.izradaweba.mail.aws.v2.sendContactMessage
 import eu.izradaweba.temp.resourceServiceBuilder
 
 import org.http4s.scalatags.*
