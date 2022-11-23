@@ -13,6 +13,11 @@ lazy val root = (project in file("."))
     maintainer := "mario@laravelista.hr",
     dockerExposedPorts := Seq(8080),
     dockerBaseImage := "eclipse-temurin:18",
+    dockerRepository := Some("ghcr.io"),
+    dockerUsername := Some("mabasic/izradaweba"),
+    dockerLabels := Map(
+      "org.opencontainers.image.source" -> "https://github.com/mabasic/izradaweba"
+    ),
     // Note: Fix for sbt run, not unbinding port on exit.
     run / fork := true,
     libraryDependencies += "org.http4s" %% "http4s-dsl" % http4sVersion,
