@@ -92,7 +92,7 @@ val messageReceivedPageContent = Seq(
       typo.pageTitle("Uspjeh 💌"),
       typo.pageSubtitle("Hvala vam što ste nas kontaktirali."),
       typo.pageParagraph(
-        "Primili smo vašu poruku i odgovoriti ćemo vam u najkraćem mogučem roku."
+        "Primili smo vašu poruku i odgovoriti ćemo vam u najkraćem mogućem roku."
       )
     )
   )
