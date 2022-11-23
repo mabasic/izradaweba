@@ -49,7 +49,7 @@ For docker image:
 ```
 sbt Docker/publishLocal
 
-docker run -p 80:8080 --env-file .env  website:0.1.0-SNAPSHOT
+docker run -p 80:8080 --env-file .env --restart unless-stopped -d  website:0.1.0-SNAPSHOT
 ```
 
 For zip file:
