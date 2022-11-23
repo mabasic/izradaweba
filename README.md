@@ -41,6 +41,25 @@ sbtn
 sbtn reStatus
 ```
 
+## Deployment
+
+
+For docker image:
+
+```
+sbt Docker/publishLocal
+
+docker run -p 80:8080 website:0.1.0-SNAPSHOT
+```
+
+For zip file:
+
+```
+sbt dist
+```
+
+Unzip the file and run the binary with `./bin/website`.
+
 ## Scala.js
 
 ```bash
