@@ -94,7 +94,7 @@ class ResourceServiceBuilder[F[_]] private (
                 StaticFile.fromResource(
                   // Note: This entire file can be removed once this issue is solved:
                   // https://github.com/http4s/http4s/issues/5240
-                  path.toString.replaceAll("\\\\", "/"),
+                  path.toString.replace(java.io.File.separatorChar, '/'),
                   Some(request),
                   preferGzipped = preferGzipped,
                   classLoader
