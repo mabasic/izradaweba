@@ -21,11 +21,9 @@ import eu.izradaweba.pages.{
   privacyNoticePage,
   creditsPage,
   contactPage,
-  contactMessageValidationRules,
   messageReceivedPage,
-  contactFieldNames
+  ContactMessage
 }
-import eu.izradaweba.validation.{validate, ValidationStatus}
 import org.http4s.Charset.`UTF-8`
 import org.http4s.headers.`Content-Type`
 import org.http4s.QueryParamDecoder
@@ -36,6 +34,11 @@ import eu.izradaweba.mail.aws.v2.sendContactMessage
 import eu.izradaweba.temp.resourceServiceBuilder
 
 import org.http4s.scalatags.*
+import eu.izradaweba.validation.*
+import org.scalactic.*
+import org.scalactic.Accumulation.*
+import eu.izradaweba.mail.aws.v2.sendContactMessage
+import scala.util.Try
 
 // Note: What does it mean "implicit"?
 implicit val subjectQueryParamDecoder: QueryParamDecoder[Option[Tag]] =
@@ -53,6 +56,8 @@ object Main extends IOApp {
       Ok(referencesPage)
     case GET -> Route.PrivacyNotice.url =>
       Ok(privacyNoticePage)
+    // I have left this here because I did not want to delete it :).
+    // The credits can be found in the project repository readme file.
     // case GET -> Route.Credits.url =>
     //   Ok(creditsPage)
     case GET -> Route.Contact.url :? OptionalSubjectQueryParamMatcher(
@@ -63,27 +68,27 @@ object Main extends IOApp {
         case Some(maybeSubject) => Ok(contactPage(querySubject = maybeSubject))
     case req @ POST -> Route.Contact.url =>
       req.decode[UrlForm] { data =>
-        val validationStatus =
-          validate(contactMessageValidationRules, data, contactFieldNames)
+        val fullName =
+          parseString(data.getFirst("full_name"), "full_name", "ime i prezime")
+        val emailAddress = parseEmail(
+          data.getFirst("email_address"),
+          "email_address",
+          "email adresa"
+        )
+        val subject = parseTag(data.getFirst("subject"), "subject", "predmet")
+        val message = parseString(data.getFirst("message"), "message", "poruka")
+        val gdprConsent =
+          parseConsent(data.getFirst("gdpr_consent"), "gdpr_consent", "privola")
 
-        validationStatus match
-          // If validation passes send email, display success message.
-          case ValidationStatus(true, data, _) =>
-            // val contactMessage = ContactMessage(
-            //   full_name = data.getOrElse,
-            //   email_address = "test@example.com",
-            //   subject = eu.izradaweba.Tag.WebStandard,
-            //   message = "Ovo je test poruka.",
-            //   gdpr_consent = true
-            // )
+        withGood(fullName, emailAddress, subject, message, gdprConsent) {
+          ContactMessage(_, _, _, _, _)
+        } match
+          case Good(contactMessage) =>
+            val response = Try(sendContactMessage(contactMessage))
 
-            // sendContactMessage()
-
-            Ok(messageReceivedPage)
-
-          // If validation fails, display validation errors in form
-          case ValidationStatus(false, _, errors) =>
-            UnprocessableEntity(contactPage(data, errors))
+            Ok(messageReceivedPage(response))
+          case Bad(errors) =>
+            UnprocessableEntity(contactPage(data, Some(errors)))
       }
   }
 

@@ -6,17 +6,13 @@ import eu.izradaweba.{Route, references, Config}
 import eu.izradaweba.layouts.defaultLayout
 import eu.izradaweba.partials.renderReferences
 import eu.izradaweba.typography as typo
-import eu.izradaweba.validation.{
-  ValidationRules,
-  Email,
-  validateString,
-  validateEmail,
-  validateTag,
-  validateConsent,
-  ValidationErrors,
-  ValidatedData
-}
+import eu.izradaweba.validation.{Email, ValidationError}
 import org.http4s.UrlForm
+import org.scalactic.*
+import scala.util.Try
+import software.amazon.awssdk.services.sesv2.model.SendEmailResponse
+import scala.util.Success
+import scala.util.Failure
 
 case class Subject(
     id: String,
@@ -31,22 +27,6 @@ case class ContactMessage(
     gdpr_consent: Boolean
 )
 
-val contactMessageValidationRules: ValidationRules = Map(
-  "full_name" -> List(validateString),
-  "email_address" -> List(validateEmail),
-  "subject" -> List(validateTag),
-  "message" -> List(validateString),
-  "gdpr_consent" -> List(validateConsent)
-)
-
-val contactFieldNames = Map(
-  "full_name" -> "Ime i prezime",
-  "email_address" -> "Email adresa",
-  "subject" -> "Predmet",
-  "message" -> "Poruka",
-  "gdpr_consent" -> "Privola"
-)
-
 def itemToSubject(item: Item) =
   Subject(text = item.name, id = item.tag.tag)
 
@@ -57,14 +37,20 @@ val subjects = (productSubjects ++ serviceSubjects).sortBy(_.text)
 
 val requiredMark = span(cls := "text-red-500", "*")
 
-def displayError(fieldName: String, errors: ValidationErrors): Modifier =
-  if (errors.contains(fieldName)) then
-    div(
-      cls := "text-sm font-bold text-red-500 mt-2",
-      for error <- errors.getOrElse(fieldName, List())
-      yield error.getMessage()
-    )
-  else ""
+def displayError(
+    inputName: String,
+    maybeErrors: Option[Every[ValidationError]]
+): Modifier =
+  maybeErrors match
+    case Some(errors) =>
+      errors.find(error => error.inputName == inputName) match
+        case Some(error) =>
+          div(
+            cls := "text-sm font-bold text-red-500 mt-2",
+            error.message
+          )
+        case None => ""
+    case None => ""
 
 def old(fieldName: String, oldData: UrlForm): Modifier =
   if oldData.values.contains(fieldName) then
@@ -86,21 +72,29 @@ def getSubject(
       if subjectId == tag.tag then selected := true
       else ""
 
-val messageReceivedPageContent = Seq(
+def messageReceivedPageContent(emailResponse: Try[SendEmailResponse]) = Seq(
   typo.page(
-    Seq(
-      typo.pageTitle("Uspjeh 💌"),
-      typo.pageSubtitle("Hvala vam što ste nas kontaktirali."),
-      typo.pageParagraph(
-        "Primili smo vašu poruku i odgovoriti ćemo vam u najkraćem mogućem roku."
-      )
-    )
+    emailResponse match
+      case Success(_) =>
+        Seq(
+          typo.pageTitle("Uspjeh 💌"),
+          typo.pageSubtitle("Hvala vam što ste nas kontaktirali."),
+          typo.pageParagraph(
+            "Primili smo vašu poruku i odgovoriti ćemo vam u najkraćem mogućem roku."
+          )
+        )
+      case Failure(exception) =>
+        Seq(
+          typo.pageTitle("Greška 🐞"),
+          typo.pageSubtitle("Dogodila se greška prilikom slanja poruke."),
+          typo.pageParagraph(exception.getMessage())
+        )
   )
 )
 
 def contactPageContent(
     oldData: UrlForm,
-    errors: ValidationErrors,
+    errors: Option[Every[ValidationError]],
     querySubject: Option[eu.izradaweba.Tag]
 ) = Seq(
   typo.page(
@@ -232,7 +226,7 @@ def contactPageContent(
 
 def contactPage(
     oldData: UrlForm = UrlForm(),
-    errors: ValidationErrors = Map(),
+    errors: Option[Every[ValidationError]] = None,
     querySubject: Option[eu.izradaweba.Tag] = None
 ) =
   defaultLayout(
@@ -241,9 +235,9 @@ def contactPage(
     metaTitle = "Kontakt"
   )
 
-def messageReceivedPage =
+def messageReceivedPage(emailResponse: Try[SendEmailResponse]) =
   defaultLayout(
-    messageReceivedPageContent,
+    messageReceivedPageContent(emailResponse),
     activeRoute = Route.Contact,
     metaTitle = "Kontakt"
   )

@@ -21,17 +21,18 @@ import software.amazon.awssdk.services.sesv2.model.{
   Body
 }
 
-val credentials = AwsBasicCredentials.create(
-  Config.ses.key,
-  Config.ses.secret
-)
+def getClient(): SesV2Client =
+  val credentials = AwsBasicCredentials.create(
+    Config.ses.key,
+    Config.ses.secret
+  )
 
-val region = Region.of(Config.ses.region)
+  val region = Region.of(Config.ses.region)
 
-val client = SesV2Client.builder
-  .region(region)
-  .credentialsProvider(StaticCredentialsProvider.create(credentials))
-  .build
+  SesV2Client.builder
+    .region(region)
+    .credentialsProvider(StaticCredentialsProvider.create(credentials))
+    .build
 
 def send(
     to: String,
@@ -57,6 +58,8 @@ def send(
     .fromEmailAddress(Config.emailAddress)
     .replyToAddresses(replyTo)
     .build
+
+  val client = getClient()
 
   client.sendEmail(request)
 

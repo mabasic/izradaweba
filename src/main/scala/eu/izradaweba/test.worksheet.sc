@@ -1,34 +1,22 @@
-// import eu.izradaweba.references
-import eu.izradaweba.pages.{Item, products, services}
+import org.scalactic.*
+import eu.izradaweba.validation.ValidationError
 
-// references
-//   .sortBy(_.name)
-//   .reverse
-//   .sortBy(_.yearMade)
-//   .reverse
-//   .map(reference => List(reference.yearMade, reference.nam  /*>  : List[List[Matchable]] = List(List(2022, Bonaventura), Lis…  */e))
-
-case class Subject(
-    id: String,
-    text: String
+val test = Many(
+  ValidationError("name", "Ime nije ispravno"),
+  ValidationError("email", "Email nije ispravan")
+) /*>  : Many[ValidationErr…  */
+val test1 = One(
+  ValidationError("name", "Ime nije ispravno")
+) /*>  : One[ValidationError] = One(ValidationError(name,Ime nije …  */
+val test2 = Every(
+  Good("super"),
+  Bad(One(ValidationError("email", "email nije ispravan.")))
 )
 
-def itemToSubject(item: Item) =
-  Subject(text = item.name, id = item.tag.tag)
+test2 match
+  case Good(good)  => good
+  case Bad(errors) => errors.first.inputName
 
-val productSubjects = products.map(
-  itemToSubject
-) /*>  : List[Subject] = List(Subject(web-shop,Internet trgovina), Subject(boo…  */
-val serviceSubjects = services.map(
-  itemToSubject
-) /*>  : List[Subject] = List(Subject(web-standard,Web stranice), Subject(cust…  */
+test.head.inputName /*>  : String = name  */
 
-val subjects =
-  productSubjects ++ serviceSubjects /*>  : List[Subject] = List(Subject(web-shop,Internet trgovina), Subject(boo…  */
-
-def add(x: Int, y: Int) = x + y
-def add(x: Float, y: Float) = x + y
-
-def addOne = add(_, 2)
-
-addOne(3) /*>  : Int = 5  */
+test1.head.inputName /*>  : String = name  */

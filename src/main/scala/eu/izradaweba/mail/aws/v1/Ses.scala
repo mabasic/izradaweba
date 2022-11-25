@@ -22,16 +22,17 @@ import com.amazonaws.services.simpleemailv2.model.{
   SendEmailResult
 }
 
-val credentials = BasicAWSCredentials(
-  Config.ses.key,
-  Config.ses.secret
-)
+def getClient(): AmazonSimpleEmailServiceV2 =
+  val credentials = BasicAWSCredentials(
+    Config.ses.key,
+    Config.ses.secret
+  )
 
-val client: AmazonSimpleEmailServiceV2 = AmazonSimpleEmailServiceV2ClientBuilder
-  .standard()
-  .withCredentials(AWSStaticCredentialsProvider(credentials))
-  .withRegion(Config.ses.region)
-  .build
+  AmazonSimpleEmailServiceV2ClientBuilder
+    .standard()
+    .withCredentials(AWSStaticCredentialsProvider(credentials))
+    .withRegion(Config.ses.region)
+    .build
 
 def send(
     to: String,
@@ -57,6 +58,8 @@ def send(
     .withReplyToAddresses(replyTo)
 
   request.setFromEmailAddress(Config.replyToAddress)
+
+  val client = getClient()
 
   client.sendEmail(request)
 
