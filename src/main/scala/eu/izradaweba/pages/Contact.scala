@@ -125,6 +125,7 @@ def contactPageContent(
         div(
           cls := "mb-5",
           label(
+            cls := "text-sm font-bold",
             `for` := "name",
             "Ime i prezime",
             requiredMark
@@ -143,6 +144,7 @@ def contactPageContent(
         div(
           cls := "mb-5 hidden",
           label(
+            cls := "text-sm font-bold",
             `for` := "name",
             "Ime",
             requiredMark
@@ -159,6 +161,7 @@ def contactPageContent(
         div(
           cls := "mb-5",
           label(
+            cls := "text-sm font-bold",
             `for` := "email",
             "Email adresa",
             requiredMark
@@ -177,6 +180,7 @@ def contactPageContent(
         div(
           cls := "mb-5",
           label(
+            cls := "text-sm font-bold",
             `for` := "subject",
             "Predmet",
             requiredMark
@@ -204,6 +208,7 @@ def contactPageContent(
         div(
           cls := "mb-5",
           label(
+            cls := "text-sm font-bold",
             `for` := "message",
             "Poruka",
             requiredMark

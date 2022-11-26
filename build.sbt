@@ -29,6 +29,7 @@ lazy val root = (project in file("."))
     libraryDependencies += "com.amazonaws" % "aws-java-sdk-sesv2" % "1.12.346",
     libraryDependencies += "software.amazon.awssdk" % "bom" % awsSdkVersion,
     libraryDependencies += "software.amazon.awssdk" % "sesv2" % awsSdkVersion,
+    libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.14",
     // Note: workaround for: https://github.com/lampepfl/dotty/issues/15288
     Compile / doc / sources := Nil
   )
