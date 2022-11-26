@@ -72,23 +72,31 @@ def getSubject(
       if subjectId == tag.tag then selected := true
       else ""
 
-def messageReceivedPageContent(emailResponse: Try[SendEmailResponse]) = Seq(
+val respondSuccess =
+  Seq(
+    typo.pageTitle("Uspjeh 💌"),
+    typo.pageSubtitle("Hvala vam što ste nas kontaktirali."),
+    typo.pageParagraph(
+      "Primili smo vašu poruku i odgovoriti ćemo vam u najkraćem mogućem roku."
+    )
+  )
+
+def messageReceivedPageContent(
+    maybeEmailResponse: Option[Try[SendEmailResponse]]
+) = Seq(
   typo.page(
-    emailResponse match
-      case Success(_) =>
-        Seq(
-          typo.pageTitle("Uspjeh 💌"),
-          typo.pageSubtitle("Hvala vam što ste nas kontaktirali."),
-          typo.pageParagraph(
-            "Primili smo vašu poruku i odgovoriti ćemo vam u najkraćem mogućem roku."
-          )
-        )
-      case Failure(exception) =>
-        Seq(
-          typo.pageTitle("Greška 🐞"),
-          typo.pageSubtitle("Dogodila se greška prilikom slanja poruke."),
-          typo.pageParagraph(exception.getMessage())
-        )
+    maybeEmailResponse match
+      case Some(emailResponse) =>
+        emailResponse match
+          case Success(_) =>
+            respondSuccess
+          case Failure(exception) =>
+            Seq(
+              typo.pageTitle("Greška 🐞"),
+              typo.pageSubtitle("Dogodila se greška prilikom slanja poruke."),
+              typo.pageParagraph(exception.getMessage())
+            )
+      case None => respondSuccess
   )
 )
 
@@ -131,6 +139,22 @@ def contactPageContent(
             old("full_name", oldData)
           ),
           displayError("full_name", errors)
+        ),
+        div(
+          cls := "mb-5 hidden",
+          label(
+            `for` := "name",
+            "Ime",
+            requiredMark
+          ),
+          input(
+            id := "first_name",
+            `type` := "text",
+            name := "first_name",
+            placeholder := "Upišite vaše ime",
+            cls := "bg-white/30 dark:bg-black/20 rounded-xl w-full block p-2",
+            autocomplete := "off"
+          )
         ),
         div(
           cls := "mb-5",
@@ -189,7 +213,9 @@ def contactPageContent(
             name := "message",
             placeholder := "Upišite vašu poruku",
             cls := "bg-white/30 dark:bg-black/20 rounded-xl w-full block p-2 h-52",
-            old("message", oldData)
+            if oldData.values.contains("message") then
+              oldData.getFirstOrElse("message", "")
+            else ""
           ),
           displayError("message", errors)
         ),
@@ -235,7 +261,7 @@ def contactPage(
     metaTitle = "Kontakt"
   )
 
-def messageReceivedPage(emailResponse: Try[SendEmailResponse]) =
+def messageReceivedPage(emailResponse: Option[Try[SendEmailResponse]] = None) =
   defaultLayout(
     messageReceivedPageContent(emailResponse),
     activeRoute = Route.Contact,

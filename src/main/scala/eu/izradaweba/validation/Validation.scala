@@ -111,3 +111,8 @@ def parseEmail(
         )
     case None =>
       Bad(One(ValidationError(inputName, s"Polje ${fieldName} je obavezno.")))
+
+def detectHoneypot(input: Option[String]): Boolean =
+  input match
+    case Some(value) => if value.length > 0 then true else false
+    case None        => true

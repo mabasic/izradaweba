@@ -80,15 +80,19 @@ object Main extends IOApp {
         val gdprConsent =
           parseConsent(data.getFirst("gdpr_consent"), "gdpr_consent", "privola")
 
-        withGood(fullName, emailAddress, subject, message, gdprConsent) {
-          ContactMessage(_, _, _, _, _)
-        } match
-          case Good(contactMessage) =>
-            val response = Try(sendContactMessage(contactMessage))
+        detectHoneypot(data.getFirst("first_name")) match
+          case true =>
+            Ok(messageReceivedPage())
+          case false =>
+            withGood(fullName, emailAddress, subject, message, gdprConsent) {
+              ContactMessage(_, _, _, _, _)
+            } match
+              case Good(contactMessage) =>
+                val response = Try(sendContactMessage(contactMessage))
 
-            Ok(messageReceivedPage(response))
-          case Bad(errors) =>
-            UnprocessableEntity(contactPage(data, Some(errors)))
+                Ok(messageReceivedPage(Some(response)))
+              case Bad(errors) =>
+                UnprocessableEntity(contactPage(data, Some(errors)))
       }
   }
 
