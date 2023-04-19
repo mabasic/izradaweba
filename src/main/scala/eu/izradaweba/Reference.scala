@@ -22,6 +22,13 @@ val references =
 
   List(
     Reference(
+      "OPG Paić",
+      WebStandard,
+      Some(URL("https://opg-paic.hr")),
+      featured = true,
+      yearMade = 2023
+    ),
+    Reference(
       "Kikolina",
       WebShop,
       Some(URL("https://kikolina.hr")),
@@ -39,7 +46,6 @@ val references =
       "Quad Murter Kornati",
       WebStandard,
       Some(URL("https://quad-murterkornati.com")),
-      featured = true,
       yearMade = 2022
     ),
     Reference(

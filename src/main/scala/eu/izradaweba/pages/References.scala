@@ -21,6 +21,7 @@ val referencesPageContent = Seq(
 def referencesPage =
   defaultLayout(
     referencesPageContent,
-    activeRoute = Route.References,
-    metaTitle = "Reference"
+    activeRoute = Some(Route.References),
+    metaTitle = "Reference",
+    canonicalUrl = Some(Route.References.url)
   )

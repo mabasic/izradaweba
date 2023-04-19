@@ -201,9 +201,10 @@ val home = Seq(
 
 def homePage = defaultLayout(
   home,
-  activeRoute = Route.Home,
+  activeRoute = Some(Route.Home),
   metaTitle = "Izrada web stranica",
   metaDescription = Some(
     "Web stranice prilagođene svim uređajima, optimizirane za tražilice, sa Lighthouse rezultatom u prosjeku preko 90/100, po početnoj cijeni od 299,99€."
-  )
+  ),
+  canonicalUrl = Some(Route.Home.url)
 )

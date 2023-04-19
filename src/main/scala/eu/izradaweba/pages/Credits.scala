@@ -121,6 +121,7 @@ val creditsPageContent = Seq(
 def creditsPage =
   defaultLayout(
     creditsPageContent,
-    activeRoute = Route.Credits,
-    metaTitle = "Zahvale"
+    activeRoute = Some(Route.Credits),
+    metaTitle = "Zahvale",
+    canonicalUrl = Some(Route.Credits.url)
   )

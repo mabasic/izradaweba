@@ -81,6 +81,7 @@ val privacyNoticePageContent = Seq(
 def privacyNoticePage =
   defaultLayout(
     privacyNoticePageContent,
-    activeRoute = Route.PrivacyNotice,
-    metaTitle = "Izjava o privatnosti"
+    activeRoute = Some(Route.PrivacyNotice),
+    metaTitle = "Izjava o privatnosti",
+    canonicalUrl = Some(Route.PrivacyNotice.url)
   )

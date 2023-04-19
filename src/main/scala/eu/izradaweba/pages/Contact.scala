@@ -262,13 +262,14 @@ def contactPage(
 ) =
   defaultLayout(
     contactPageContent(oldData, errors, querySubject),
-    activeRoute = Route.Contact,
-    metaTitle = "Kontakt"
+    activeRoute = Some(Route.Contact),
+    metaTitle = "Kontakt",
+    canonicalUrl = Some(Route.Contact.url)
   )
 
 def messageReceivedPage(emailResponse: Option[Try[SendEmailResponse]] = None) =
   defaultLayout(
     messageReceivedPageContent(emailResponse),
-    activeRoute = Route.Contact,
+    activeRoute = Some(Route.Contact),
     metaTitle = "Kontakt"
   )

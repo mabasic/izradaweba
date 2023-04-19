@@ -1,5 +1,6 @@
 package eu.izradaweba.layouts
 
+import org.http4s.dsl.io.Root
 import scalatags.Text.all.*
 import scalatags.Text.tags2.title
 import scalatags.Text.svgTags.{
@@ -196,23 +197,28 @@ def menuItem(
     text
   )
 
-def menu(activeRoute: Route) =
+def isActiveRoute(currentRoute: Option[Route], targetRoute: Route) =
+  currentRoute match
+    case Some(route) => route == targetRoute
+    case None        => false
+
+def menu(activeRoute: Option[Route]) =
   div(
     cls := "items-center hidden md:flex",
     menuItem(
       Route.Home.name,
       href = Route.Home.url.toString,
-      isActive = activeRoute == Route.Home
+      isActive = isActiveRoute(activeRoute, Route.Home)
     ),
     menuItem(
       Route.References.name,
       href = Route.References.url.toString,
-      isActive = activeRoute == Route.References
+      isActive = isActiveRoute(activeRoute, Route.References)
     ),
     menuItem(
       Route.Contact.name,
       href = Route.Contact.url.toString,
-      isActive = activeRoute == Route.Contact
+      isActive = isActiveRoute(activeRoute, Route.Contact)
     )
   )
 
@@ -232,7 +238,7 @@ val mobileNavbarToggle =
     dot
   )
 
-def navbar(activeRoute: Route) =
+def navbar(activeRoute: Option[Route]) =
   div(
     cls := "flex items-center justify-between shrink-0 h-14 w-full border-b border-solid border-border-color dark:border-dark-border-color px-7 py-0 whitespace-nowrap",
     logo,
@@ -240,7 +246,7 @@ def navbar(activeRoute: Route) =
     mobileNavbarToggle
   )
 
-def mobileNavbar(activeRoute: Route) =
+def mobileNavbar(activeRoute: Option[Route]) =
   div(
     id := "mobile-navbar",
     cls := "overflow-auto p-6 shrink-0 hidden md:hidden",
@@ -256,19 +262,19 @@ def mobileNavbar(activeRoute: Route) =
           Route.Home.name,
           isMobile = true,
           href = Route.Home.url.toString,
-          isActive = activeRoute == Route.Home
+          isActive = isActiveRoute(activeRoute, Route.Home)
         ),
         menuItem(
           Route.References.name,
           isMobile = true,
           href = Route.References.url.toString,
-          isActive = activeRoute == Route.References
+          isActive = isActiveRoute(activeRoute, Route.References)
         ),
         menuItem(
           Route.Contact.name,
           isMobile = true,
           href = Route.Contact.url.toString,
-          isActive = activeRoute == Route.Contact
+          isActive = isActiveRoute(activeRoute, Route.Contact)
         )
       )
     )
@@ -286,7 +292,11 @@ val footer =
     div(
       cls := "text-xs",
       "©️  ",
-      typo.outboundLink("Mario Bašić", URL("https://mariobasic.com"), includeRel = false),
+      typo.outboundLink(
+        "Mario Bašić",
+        URL("https://mariobasic.com"),
+        includeRel = false
+      ),
       " 2011-2022. Sva prava pridržana. Napravljeno sa ",
       typo.outboundLink("Scala", URL("https://scala-lang.org")),
       " i ",
@@ -357,10 +367,11 @@ import BgMode.*
 
 def defaultLayout(
     children: Seq[ConcreteHtmlTag[String]],
-    activeRoute: Route,
+    activeRoute: Option[Route],
     metaTitle: String,
     bgMode: BgMode = GenerativeBigSurWaves,
-    metaDescription: Option[String] = None
+    metaDescription: Option[String] = None,
+    canonicalUrl: Option[Path] = None
 ) =
 
   def getBodyClass =
@@ -387,7 +398,16 @@ def defaultLayout(
           name := "author",
           content := "Mario Bašić"
         ),
-        link(href := "https://izradaweba.eu", rel := "canonical"),
+        canonicalUrl match
+          case Some(path) =>
+            link(
+              href := s"https://izradaweba.eu${
+                  if path == Root then "" else path.toString
+                }",
+              rel := "canonical"
+            )
+          case None => ()
+        ,
         link(href := "/assets/css/index.css", rel := "stylesheet"),
         link(href := "/assets/img/favicon.ico", rel := "icon"),
         link(href := "/assets/img/favicon.png", rel := "shortcut icon"),
