@@ -60,7 +60,7 @@ sbt Docker/publish
 docker run -p 127.0.0.1:8080:8080 --env-file .env --restart unless-stopped -d --name izradaweba ghcr.io/mabasic/izradaweba/website:0.1.0-SNAPSHOT
 
 # Run on production (for real)
-docker run -p 127.0.0.1:8081:8080 --env-file .env --restart unless-stopped -d --name izradaweba ghcr.io/mabasic/izradaweba/website:0.2.0-SNAPSHOT
+docker run -p 127.0.0.1:8080:8080 --env-file .env --restart unless-stopped -d --name izradaweba ghcr.io/mabasic/izradaweba/website:0.2.0-SNAPSHOT
 ```
 
 When deploying to production:
