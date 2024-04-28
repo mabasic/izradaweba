@@ -22,13 +22,9 @@ val privacyNoticePageContent = Seq(
       typo.pageHeading("Forme"),
       typo.pageParagraph(
         Seq(
-          "Podaci dostavljeni putem kontakt obrasca (ime i prezime, adresa e-pošte, predmet, poruka, privola) bit će pohranjeni u našem e-sandučiću na neodređeno vrijeme za potrebe buduće analize i kontaktiranja. Ako želite da izbrišemo vaše podatke iz našeg e-sandučića, pošaljite nam email na ",
-          typo.outboundLink(
-            text = Config.emailAddress,
-            url = URL(s"mailto:${Config.emailAddress}"),
-            includeRel = false
-          ),
-          "."
+          "Podaci dostavljeni putem kontakt obrasca (ime i prezime, adresa e-pošte, predmet, poruka, privola) bit će pohranjeni u našem e-sandučiću na neodređeno vrijeme za potrebe buduće analize i kontaktiranja. Ako želite da izbrišemo vaše podatke iz našeg e-sandučića, kontaktirajte nas koristeći ovu ",
+          typo.routeLink(Route.Contact),
+          " formu."
         )
       ),
       typo.pageHeading("Analitika"),
@@ -53,18 +49,6 @@ val privacyNoticePageContent = Seq(
         cls := "my-3",
         b("Mario Bašić"),
         ", Laravelista",
-        br(),
-        "Markov Jose 1",
-        br(),
-        "Murter, HR 22243",
-        br(),
-        abbr(title := "E-mail", "E:"),
-        " ",
-        typo.outboundLink(
-          text = Config.emailAddress,
-          url = URL(s"mailto:${Config.emailAddress}"),
-          includeRel = false
-        ),
         br(),
         abbr(title := "Web", "W:"),
         " ",
