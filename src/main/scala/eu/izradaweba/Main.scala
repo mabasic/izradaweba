@@ -14,7 +14,7 @@ import org.http4s.dsl.io.*
 import org.http4s.ember.server.*
 import org.http4s.server.middleware.Logger
 import org.http4s.server.{Router, Server}
-// import org.http4s.server.staticcontent.*
+import org.http4s.server.staticcontent.*
 import eu.izradaweba.pages.{
   homePage,
   referencesPage,
@@ -32,7 +32,6 @@ import org.http4s.dsl.impl.OptionalQueryParamDecoderMatcher
 import org.http4s.dsl.impl.QueryParamDecoderMatcher
 
 import eu.izradaweba.mail.aws.v2.sendContactMessage
-import eu.izradaweba.temp.resourceServiceBuilder
 
 import org.http4s.scalatags.*
 import eu.izradaweba.validation.*
