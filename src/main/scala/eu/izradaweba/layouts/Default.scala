@@ -56,7 +56,7 @@ def bg(mode: ConcreteHtmlTag[String]) =
 
 def bgGenerativeBigSurWaves =
   bg(
-    generateBigSurWaves(enableAnimation = true)
+    generateBigSurWaves(enableAnimation = false)
   )
 
 def bgGenerativeBigSurWavesJS =
@@ -184,7 +184,7 @@ def menuItem(
   val activeClsMobile =
     "no-underline text-theme-color dark:text-dark-theme-color p-2 font-semibold text-base transition rounded-md hover:bg-hover-menu-bg dark:hover:bg-dark-hover-menu-bg"
   val inactiveClsMobile =
-    "no-underline text-theme-color dark:text-dnormal text-base transition hover:bg-hover-menu-bg dark:hover:bg-dark-hover-menu-bg"
+    "no-underline text-theme-color dark:text-dark-theme-color p-2 font-normal text-base transition hover:bg-hover-menu-bg dark:hover:bg-dark-hover-menu-bg"
 
   val itemClass =
     (isMobile, isActive) match
@@ -350,26 +350,23 @@ val footer =
       "."
     ),
     div(
-      cls := "text-xs mt-2 lg:mt-0 flex items-center justify-between",
-      div(
-        cls := "mr-2 flex gap-2",
-        typo.outboundLink(
-          "Go Visit",
-          URL("https://govisit.hr"),
-          includeRel = false
-        ),
-        typo.outboundLink(
-          "Laravelista",
-          URL("https://laravelista.com"),
-          includeRel = false
-        ),
-        typo.routeLink(Route.PrivacyNotice),
-        // typo.routeLink(Route.Credits),
-        typo.outboundLink(
-          "Izvorni kod",
-          URL("https://github.com/mabasic/izradaweba"),
-          includeRel = false
-        )
+      cls := "text-xs mt-2 lg:mt-0 flex flex-wrap gap-2",
+      typo.outboundLink(
+        "Go Visit",
+        URL("https://govisit.hr"),
+        includeRel = false
+      ),
+      typo.outboundLink(
+        "Laravelista",
+        URL("https://laravelista.com"),
+        includeRel = false
+      ),
+      typo.routeLink(Route.PrivacyNotice),
+      // typo.routeLink(Route.Credits),
+      typo.outboundLink(
+        "Izvorni kod",
+        URL("https://github.com/mabasic/izradaweba"),
+        includeRel = false
       )
     )
   )
