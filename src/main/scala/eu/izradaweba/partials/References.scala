@@ -21,13 +21,13 @@ def renderReferences(
     */
   val seeMoreButton =
     button(
-      cls := "border-0 cursor-pointer whitespace-nowrap transition duration-300 mt-4 py-1.5 px-6 rounded-2xl font-normal mt-0 text-sm bg-transparent mr-2 text-button-inactive dark:text-dark-button-inactive border border-solid border-button-inactive dark:border-dark-button-inactive hidden sm:block hover:text-black hover:border-black dark:hover:text-white dark:hover:border-white open-pop-up",
+      cls := "border-0 cursor-pointer whitespace-nowrap transition mt-4 py-1.5 px-6 rounded-2xl font-normal mt-0 text-sm bg-transparent mr-2 text-button-inactive dark:text-dark-button-inactive border border-solid border-button-inactive dark:border-dark-button-inactive hidden sm:block hover:text-black hover:border-black dark:hover:text-white dark:hover:border-white open-pop-up",
       "Pogledajte"
     )
 
   def externalWebsiteLink(url: URL) =
     a(
-      cls := "border-0 cursor-pointer whitespace-nowrap transition duration-300 mt-4 py-1.5 px-6 rounded-2xl font-normal mt-0 text-sm bg-transparent mr-2 text-button-inactive dark:text-dark-button-inactive border border-solid border-button-inactive dark:border-dark-button-inactive hidden sm:block hover:text-black hover:border-black dark:hover:text-white dark:hover:border-white",
+      cls := "transition py-1.5 px-6 text-sm text-button-inactive dark:text-dark-button-inactive border border-solid border-button-inactive dark:border-dark-button-inactive rounded-2xl bg-transparent hidden sm:block hover:text-black hover:border-black dark:hover:text-white dark:hover:border-white",
       href := url.toString,
       target := "_blank",
       rel := "nofollow noopener",
@@ -78,7 +78,7 @@ def renderReferences(
       cls := "flex flex-col w-full h-full justify-around bg-theme-bg-color dark:bg-dark-content-bg pl-0 m-0 rounded-xl border border-solid border-theme-bg-color dark:border-dark-theme-bg-color",
       for reference <- references
       yield li(
-        cls := "transition duration-300 transform-gpu first:rounded-t-xl last:rounded-b-xl hover:bg-theme-bg-color dark:hover:bg-dark-theme-bg-color flex items-center w-full h-full whitespace-nowrap py-2.5 px-4 text-base border-t border-t-solid border-t-border-color dark:border-t-dark-border-color first:border-0",
+        cls := "transition transform-gpu first:rounded-t-xl last:rounded-b-xl hover:bg-theme-bg-color dark:hover:bg-dark-theme-bg-color flex items-center w-full h-full whitespace-nowrap py-2.5 px-4 text-base border-t border-t-solid border-t-border-color dark:border-t-dark-border-color first:border-0",
         div(
           cls := "flex items-center w-36",
           reference.tag.getSvg,

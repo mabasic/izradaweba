@@ -56,7 +56,7 @@ def bg(mode: ConcreteHtmlTag[String]) =
 
 def bgGenerativeBigSurWaves =
   bg(
-    generateBigSurWaves(enableAnimation = false)
+    generateBigSurWaves(enableAnimation = true)
   )
 
 def bgGenerativeBigSurWavesJS =
@@ -89,7 +89,7 @@ val bgVideo =
 val popup =
   div(
     id := "pop-up",
-    cls := "absolute py-7 px-10 top-1/2 left-1/2 transition duration-300 z-[100] bg-popup-bg flex flex-col -translate-y-2/4 -translate-x-2/4 overflow-y-auto w-4/5 sm:w-[500px] whitespace-normal opacity-0 invisible rounded-md bg-popup-bg dark:bg-dark-popup-bg shadow-lg text-black dark:text-white transition duration-500 transform-gpu",
+    cls := "absolute py-7 px-10 top-1/2 left-1/2 transition z-[100] bg-popup-bg flex flex-col -translate-y-2/4 -translate-x-2/4 overflow-y-auto w-4/5 sm:w-[500px] whitespace-normal opacity-0 invisible rounded-md bg-popup-bg dark:bg-dark-popup-bg shadow-lg text-black dark:text-white transition transform-gpu",
     div(
       cls := "pb-5 border-b border-b-solid border-b-theme-color dark:border-b-dark-border-color flex justify-between items-center",
       "Update This App",
@@ -150,11 +150,11 @@ val popup =
     div(
       cls := "mt-auto ml-auto",
       button(
-        cls := "bg-content-button-color border-0 text-[#ffffff] cursor-pointer whitespace-nowrap transition duration-300 mt-4 py-1.5 px-6 rounded-2xl text-sm mt-0 bg-transparent mr-2 text-button-inactive dark:text-dark-button-inactive border border-solid border-button-inactive dark:border-dark-button-inactive close-pop-up",
+        cls := "bg-content-button-color border-0 text-[#ffffff] cursor-pointer whitespace-nowrap transition mt-4 py-1.5 px-6 rounded-2xl text-sm mt-0 bg-transparent mr-2 text-button-inactive dark:text-dark-button-inactive border border-solid border-button-inactive dark:border-dark-button-inactive close-pop-up",
         "Cancel"
       ),
       button(
-        cls := "bg-content-button-color dark:bg-dark-content-button-color border-0 text-[#ffffff] cursor-pointer whitespace-nowrap transition duration-300 mt-4 py-1.5 px-6 rounded-2xl text-sm mt-0 hover:bg-content-button-hover-color dark:hover:bg-content-button-hover-color",
+        cls := "bg-content-button-color dark:bg-dark-content-button-color border-0 text-[#ffffff] cursor-pointer whitespace-nowrap transition mt-4 py-1.5 px-6 rounded-2xl text-sm mt-0 hover:bg-content-button-hover-color dark:hover:bg-content-button-hover-color",
         "Continue"
       )
     )
@@ -177,14 +177,14 @@ def menuItem(
     isMobile: Boolean = false
 ) =
   val activeCls =
-    "py-4 px-7 no-underline border-b border-b-solid transition duration-300 hover:text-theme-color dark:hover:text-dark-theme-color hover:border-b-2 hover:border-b-solid hover:border-b-theme-color dark:hover:border-b-dark-theme-color text-theme-color dark:text-dark-theme-color border-b-2 border-b-theme-color dark:border-b-dark-theme-color font-medium"
+    "py-4 px-7 no-underline border-b border-b-solid transition hover:text-theme-color dark:hover:text-dark-theme-color hover:border-b-2 hover:border-b-solid hover:border-b-theme-color dark:hover:border-b-dark-theme-color text-theme-color dark:text-dark-theme-color border-b-2 border-b-theme-color dark:border-b-dark-theme-color font-medium"
   val inactiveCls =
-    "py-4 px-7 no-underline text-inactive-color dark:text-dark-inactive-color border-b border-b-solid border-b-transparent transition duration-300 hover:text-theme-color dark:hover:text-dark-theme-color hover:border-b-2 hover:border-b-solid hover:border-b-theme-color dark:hover:border-b-dark-theme-color font-medium"
+    "py-4 px-7 no-underline text-inactive-color dark:text-dark-inactive-color border-b-2 border-b-solid border-b-transparent transition hover:text-theme-color dark:hover:text-dark-theme-color hover:border-b-2 hover:border-b-solid hover:border-b-theme-color dark:hover:border-b-dark-theme-color font-medium"
 
   val activeClsMobile =
-    "no-underline text-theme-color dark:text-dark-theme-color p-2 font-semibold text-base transition duration-300 rounded-md hover:bg-hover-menu-bg dark:hover:bg-dark-hover-menu-bg"
+    "no-underline text-theme-color dark:text-dark-theme-color p-2 font-semibold text-base transition rounded-md hover:bg-hover-menu-bg dark:hover:bg-dark-hover-menu-bg"
   val inactiveClsMobile =
-    "no-underline text-theme-color dark:text-dark-theme-color p-2 font-normal text-base transition duration-300 rounded-md hover:bg-hover-menu-bg dark:hover:bg-dark-hover-menu-bg"
+    "no-underline text-theme-color dark:text-dnormal text-base transition hover:bg-hover-menu-bg dark:hover:bg-dark-hover-menu-bg"
 
   val itemClass =
     (isMobile, isActive) match
@@ -289,7 +289,7 @@ def mobileNavbar(activeRoute: Option[Route]) =
 val overlay =
   div(
     id := "overlay-app",
-    cls := "w-full h-full fixed left-0 top-0 pointer-events-auto opacity-0 invisible transition duration-300 bg-overlay-app transition duration-500 transform-gpu"
+    cls := "w-full h-full fixed left-0 top-0 pointer-events-auto opacity-0 invisible bg-overlay-app transition transform-gpu"
   )
 
 def themeSwitchButton =
@@ -301,7 +301,7 @@ def themeSwitchButton =
     svg(
       id := "theme-dark",
       fill := "currentColor",
-      cls := "hidden w-6 shrink-0 dark:fill-dark-light-svg dark:stroke-dark-light-svg transition duration-500",
+      cls := "hidden w-6 shrink-0 dark:fill-dark-light-svg dark:stroke-dark-light-svg transition",
       viewBox := "0 0 512 512",
       xmlns := "http://www.w3.org/2000/svg",
       path(
@@ -311,7 +311,7 @@ def themeSwitchButton =
     svg(
       id := "theme-light",
       fill := "currentColor",
-      cls := "hidden w-6 shrink-0 dark:fill-dark-light-svg dark:stroke-dark-light-svg transition duration-500",
+      cls := "hidden w-6 shrink-0 dark:fill-dark-light-svg dark:stroke-dark-light-svg transition",
       viewBox := "0 0 512 512",
       xmlns := "http://www.w3.org/2000/svg",
       path(
@@ -321,7 +321,7 @@ def themeSwitchButton =
     svg(
       id := "theme-automatic",
       fill := "currentColor",
-      cls := "w-6 shrink-0 dark:fill-dark-light-svg dark:stroke-dark-light-svg transition duration-500",
+      cls := "w-6 shrink-0 dark:fill-dark-light-svg dark:stroke-dark-light-svg transition",
       viewBox := "0 0 512 512",
       xmlns := "http://www.w3.org/2000/svg",
       path(
@@ -335,7 +335,7 @@ val footer =
     cls := "flex flex-col lg:flex-row justify-between text-theme-color dark:text-dark-theme-color py-5 px-10 items-start lg:items-center",
     div(
       cls := "text-xs",
-      "©️  ",
+      "© ",
       typo.outboundLink(
         "Mario Bašić",
         URL("https://mariobasic.com"),

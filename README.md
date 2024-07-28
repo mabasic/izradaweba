@@ -46,6 +46,7 @@ sbtn reStatus
 
 ```bash
 scala-cli fmt ./src
+scala-cli fmt ./js
 ```
 
 ## Deployment

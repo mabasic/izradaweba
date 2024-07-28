@@ -41,7 +41,7 @@ val heroSection =
       ),
       a(
         href := Route.Contact.url.toString + s"?subject=${Tag.WebStandard.tag}",
-        cls := "inline-block bg-content-button-color dark:bg-dark-content-button-color border-0 text-[#ffffff] cursor-pointer transition duration-300 whitespace-nowrap mt-4 rounded-2xl py-2 px-6 hover:bg-content-button-hover-color dark:hover:bg-dark-content-button-hover-color",
+        cls := "inline-block bg-content-button-color dark:bg-dark-content-button-color border-0 text-[#ffffff] cursor-pointer transition whitespace-nowrap mt-4 rounded-2xl py-2 px-6 hover:bg-content-button-hover-color dark:hover:bg-dark-content-button-hover-color",
         "Pošaljite upit"
       )
     ),
@@ -136,7 +136,7 @@ def itemSection(title: String, items: List[Item]) =
   def ctaButton(tag: Tag) =
     a(
       href := Route.Contact.url.toString + s"?subject=${tag.tag}",
-      cls := "bg-content-button-color dark:bg-dark-content-button-color border-0 text-[#ffffff] cursor-pointer whitespace-nowrap transition duration-300 mt-4 py-1.5 px-6 rounded-2xl font-normal mt-0 text-sm hover:bg-content-button-hover-color dark:hover:bg-dark-content-button-hover-color",
+      cls := "bg-content-button-color dark:bg-dark-content-button-color border-0 text-[#ffffff] cursor-pointer whitespace-nowrap transition py-1.5 px-6 rounded-2xl font-normal mt-0 text-sm hover:bg-content-button-hover-color dark:hover:bg-dark-content-button-hover-color",
       "Pošaljite upit"
     )
 
@@ -150,7 +150,7 @@ def itemSection(title: String, items: List[Item]) =
       cls := "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full",
       for item <- items
       yield div(
-        cls := "font-medium bg-content-bg dark:bg-dark-content-bg border border-solid border-theme-bg-color dark:border-dark-theme-bg-color transition duration-300 p-5 rounded-xl hover:bg-theme-bg-color dark:hover:bg-dark-theme-bg-color hover:scale-[1.02] transform-gpu flex flex-col",
+        cls := "font-medium bg-content-bg dark:bg-dark-content-bg border border-solid border-theme-bg-color dark:border-dark-theme-bg-color transition p-5 rounded-xl hover:bg-theme-bg-color dark:hover:bg-dark-theme-bg-color hover:scale-[1.02] transform-gpu flex flex-col",
         div(
           cls := "flex items-center",
           item.tag.getSvg,

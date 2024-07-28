@@ -167,7 +167,8 @@ def wave(
     if enableAnimation then
       animate(
         dur := "4s",
-        repeatCount := "indefinite",
+        // repeatCount := "indefinite",
+        repeatCount := "1",
         attributeName := "d",
         values := s"$wave1Path;$waveAnimatedPath;$wave1Path",
         calcMode := "spline",
