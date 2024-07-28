@@ -2,8 +2,6 @@ ThisBuild / version := "0.4.0-SNAPSHOT"
 ThisBuild / scalaVersion := "3.4.2"
 ThisBuild / organization := "eu.izradaweba"
 
-ThisBuild / scalacOptions ++= Seq("-deprecation")
-
 val http4sVersion = "0.23.27"
 val awsSdkVersion = "2.18.22"
 
@@ -31,17 +29,13 @@ lazy val root = (project in file("."))
     libraryDependencies += "software.amazon.awssdk" % "sesv2" % awsSdkVersion,
     libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.18"
   )
-  .enablePlugins(UniversalPlugin)
   .enablePlugins(JavaAppPackaging)
-  .enablePlugins(DockerPlugin)
 
 lazy val js = (project in file("js"))
   .settings(
     name := "Website JS",
     scalaJSUseMainModuleInitializer := true,
-    libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "2.3.0",
-    libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.13" % "test",
-    jsEnv := new org.scalajs.jsenv.jsdomnodejs.JSDOMNodeJSEnv(),
+    libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "2.8.0",
     Compile / fastLinkJS / scalaJSLinkerOutputDirectory := baseDirectory.value / "../src/main/resources/js",
     Compile / fullLinkJS / scalaJSLinkerOutputDirectory := baseDirectory.value / "../src/main/resources/js"
   )

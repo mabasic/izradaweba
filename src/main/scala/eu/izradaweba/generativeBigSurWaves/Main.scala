@@ -137,7 +137,7 @@ def wave(
     start: Point,
     end: Point,
     gradientId: String,
-    addAnimation: Boolean = true
+    enableAnimation: Boolean = true
 ) =
   val numSteps = Math.round(Random.between(4.0, 8.0))
   val randomRange = Random.between(32, 64)
@@ -164,7 +164,7 @@ def wave(
   path(
     d := wave1Path,
     fill := s"url(#$gradientId)",
-    if addAnimation then
+    if enableAnimation then
       animate(
         dur := "4s",
         repeatCount := "indefinite",
@@ -243,7 +243,7 @@ case class Hsl(hue: Int, saturation: Double, lightness: Double):
 
     s"#${f(0)}${f(8)}${f(4)}"
 
-def generate =
+def generate(enableAnimation: Boolean = true) =
   val numWaves = 7.0
   val baseHsl = Hsl(Random.between(0, 360), 65, 55)
   val colors = baseHsl.analogous()
@@ -302,7 +302,12 @@ def generate =
 
       gradients = gradients :+ gradient
 
-      wave(Point(0, originY), Point(width, endY), gradientId)
+      wave(
+        start = Point(0, originY),
+        end = Point(width, endY),
+        gradientId,
+        enableAnimation
+      )
 
   svg(
     id := "canvas",

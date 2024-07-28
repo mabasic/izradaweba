@@ -56,7 +56,7 @@ def bg(mode: ConcreteHtmlTag[String]) =
 
 def bgGenerativeBigSurWaves =
   bg(
-    generateBigSurWaves
+    generateBigSurWaves(enableAnimation = false)
   )
 
 def bgGenerativeBigSurWavesJS =
@@ -393,7 +393,6 @@ def defaultLayout(
     metaDescription: Option[String] = None,
     canonicalUrl: Option[Path] = None
 ) =
-
   def getBodyClass =
     bgMode match
       case Video => "bg-[url('/assets/img/bg.jpg')] bg-cover bg-center"

@@ -24,6 +24,7 @@ The entire website is made with Scala and Tailwind CSS, even the JavaScript code
 ## Quickstart
 
 ```
+# to install tailwindcss
 npm install
 
 # to compile and run once
@@ -39,6 +40,12 @@ Other useful commands:
 sbtn
 
 sbtn reStatus
+```
+
+## Formatting
+
+```bash
+scala-cli fmt ./src
 ```
 
 ## Deployment
